@@ -19,7 +19,7 @@ public class JwtService {
     public String extractUsername(String jws) {
 
         String username = Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(jws).getPayload().getSubject();
-        System.out.println(username);
+//        System.out.println(username);
         return username;
     }
 
@@ -34,7 +34,7 @@ public class JwtService {
 
     private boolean isTokenExpired(String jws) {
         Date expiration = Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(jws).getPayload().getExpiration();
-        System.out.println("Expired time - "+ expiration+" now - "+new Date());
+//        System.out.println("Expired time - "+ expiration+" now - "+new Date());
         return new Date().before(expiration);
     }
 
@@ -43,15 +43,15 @@ public class JwtService {
         boolean auth = username.equals(userDetails.getUsername());
         boolean auth2 = isTokenExpired(jws);
 
-        System.out.println("Valid username - "+auth);
-        System.out.println("Valid expired - "+auth2);
+//        System.out.println("Valid username - "+auth);
+//        System.out.println("Valid expired - "+auth2);
         return auth;
     }
 
     public SecretKey getSigningKey() {
             byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
             SecretKey key = Keys.hmacShaKeyFor(keyBytes);
-            System.out.println(key);
+//            System.out.println(key);
             return key;
 
     }

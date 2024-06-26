@@ -18,11 +18,11 @@ public class UserService {
     public User save(User user){
         return userRepository.save(user);
     }
-    public User create(User user) throws Exception {
+    public User create(User user){
         if (userRepository.existsByUsername(user.getUsername()))
-            throw new Exception("Exist username!");
+            return null;
         if (userRepository.existsByEmail(user.getEmail()))
-            throw new Exception("Exist email!");
+            return null;
         return save(user);
     }
     public User getUserByUsername(String username){

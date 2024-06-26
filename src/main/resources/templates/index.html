@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button onclick="clickBtn()">
+    Войти ВК!
+</button>
+<button onclick="logout()">
+    Выйти
+</button>
+</body>
+</html>
+<script>
+    let data  = [[${key_vk}]]
+    console.log(data);
+
+    function clickBtn() {
+        const uuid = '63248726347156725367128342341298731923';
+        const appId = 51955334;
+        const redirectUri = 'http://localhost/a';
+        const redirect_state = 'hello';
+
+        const query = `uuid=${uuid}&app_id=${appId}&response_type=silent_token&redirect_uri=${redirectUri}&redirect_state=${redirect_state}`;
+        console.log("Hello")
+        location.assign(`https://id.vk.com/auth?${query}`);
+    }
+
+    function logout() {
+        let currentUrl = window.location.href;
+        fetch('/logout1', {
+                method: 'GET',
+                credentials: 'same-origin'
+            }
+        )
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = currentUrl;
+                } else {
+                    console.error('logout  failed')
+                }
+            })
+    }
+
+</script>

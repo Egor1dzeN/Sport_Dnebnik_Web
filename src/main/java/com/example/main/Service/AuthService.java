@@ -29,10 +29,9 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
         user.setRole(Role.ROLE_USER);
-        try {
-            userService.create(user);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+        User user1 = userService.create(user);
+        if (user1 == null){
+            return null;
         }
         var jwt = jwtService.generateToken(user);
         System.out.println(jwt);

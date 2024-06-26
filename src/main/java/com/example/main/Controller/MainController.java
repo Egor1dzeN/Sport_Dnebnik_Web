@@ -2,40 +2,54 @@ package com.example.main.Controller;
 
 import com.example.main.Object.JwtTokenResponse;
 import com.example.main.Object.SignInRequest;
+import com.example.main.Object.SignUpRequest;
 import com.example.main.Service.AuthService;
+import com.example.main.Service.CookieService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
 public class MainController {
     private final AuthService authService;
+    private final CookieService cookieService;
     @GetMapping("/login")
-    public String method3(){
+    public String method3(Model model){
+        model.addAttribute("key_vk", "123451");
         return "login";
     }
     @PostMapping("/sign-in")
     public String signIn(@ModelAttribute SignInRequest signInRequest, HttpServletResponse response){
-//        System.out.println("hdjahsj");
         JwtTokenResponse tokenResponse = authService.signIn(signInRequest);
         if (tokenResponse != null){
-            Cookie cookie = new Cookie("auth", tokenResponse.getToken());
-            response.addCookie(cookie);
-//            System.out.println("hdjahsj");
+            cookieService.addCookie(response, tokenResponse);
             return "redirect:/";
         }
         return "redirect:/login";
     }
-    @GetMapping("/logout")
-    public String logout(HttpServletResponse response){
-        Cookie cookie = new Cookie("auth", null);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+    @GetMapping("/logout1")
+    public String logout(HttpServletResponse response, Principal principal){
+        cookieService.removeCookie(response);
+        return "redirect:/login";
+    }
+    @GetMapping("/sign-up")
+    public String signUp(){
+        return "signUp";
+    }
+    @PostMapping("/sign-up")
+    public String signUp(@ModelAttribute SignUpRequest request) {
+        System.out.println(request);
+        JwtTokenResponse tokenResponse = authService.signUp(request);
+        if (tokenResponse == null)
+            return "redirect:/sign-up";
         return "redirect:/login";
     }
 

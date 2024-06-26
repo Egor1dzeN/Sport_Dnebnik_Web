@@ -7,19 +7,13 @@ import com.example.main.Service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Data
 public class AuthController {
     private final AuthService authService;
-    @PostMapping("/sign-up")
-    public JwtTokenResponse signUp(@RequestBody SignUpRequest request) {
-        return authService.signUp(request);
-    }
+
 
 
     @GetMapping("/test3")

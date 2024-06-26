@@ -33,3 +33,4 @@ build/
 .vscode/
 src/main/resources/database.properties
 src/main/resources/jwt.properties
+src/main/resources/vk.properties
