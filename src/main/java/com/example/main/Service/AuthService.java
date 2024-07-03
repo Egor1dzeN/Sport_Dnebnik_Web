@@ -5,6 +5,7 @@ import com.example.main.Entity.User;
 import com.example.main.Object.JwtTokenResponse;
 import com.example.main.Object.SignInRequest;
 import com.example.main.Object.SignUpRequest;
+import com.example.main.enums.VkAuth;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,8 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
         user.setRole(Role.ROLE_USER);
+        user.setName(request.getName());
+        user.setSurname(request.getSurname());
         User user1 = userService.create(user);
         if (user1 == null){
             return null;
@@ -44,6 +47,17 @@ public class AuthService {
         ));
         if (authentication.isAuthenticated()) {
             var user = userService.userDetailsService().loadUserByUsername(request.getUsername());
+            var jwt = jwtService.generateToken(user);
+            return new JwtTokenResponse(jwt);
+        }
+        return null;
+    }
+    public JwtTokenResponse signInVk(String username){
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(
+                username,null
+        ));
+        if (authentication.isAuthenticated()) {
+            var user = userService.userDetailsService().loadUserByUsername(username);
             var jwt = jwtService.generateToken(user);
             return new JwtTokenResponse(jwt);
         }

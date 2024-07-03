@@ -21,7 +21,10 @@ public class User implements UserDetails {
     Long id;
     private String username;
     private String password;
+    private String name;
+    private String surname;
     private String email;
+    public String vkId;
     @Enumerated(EnumType.STRING)
     private Role role;
 
