@@ -25,8 +25,8 @@ import java.io.IOException;
 @Component
 @Data
 public class JwtAuthFilter extends OncePerRequestFilter {
-    public static final String BEARER_PREFIX = "Bearer ";
-    public static final String HEADER_NAME = "Authorization";
+//    public static final String BEARER_PREFIX = "Bearer ";
+//    public static final String HEADER_NAME = "Authorization";
     private final JwtService jwtService;
     private final UserService userService;
 

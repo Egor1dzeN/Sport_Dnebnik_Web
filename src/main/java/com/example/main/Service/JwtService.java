@@ -31,6 +31,14 @@ public class JwtService {
                 .signWith(getSigningKey())
                 .compact();
     }
+    public String generateToken(String username){
+        return Jwts.builder()
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 100000 * 60 * 24))
+                .signWith(getSigningKey())
+                .compact();
+    }
 
     private boolean isTokenExpired(String jws) {
         Date expiration = Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(jws).getPayload().getExpiration();

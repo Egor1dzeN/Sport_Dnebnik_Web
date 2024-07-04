@@ -4,6 +4,7 @@ import com.example.main.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -45,11 +46,12 @@ public class SecurityConfiguration {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/test",  "/test1", "/sign-in", "/sign-up", "/login", "/a").permitAll()
+                        .requestMatchers("/test", "/sign-in", "/sign-up", "/login", "/a", "/vk.auth").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/vk.auth").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(menager -> menager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .httpBasic(Customizer.withDefaults())
+//                .httpBasic(Customizer.withDefaults())
                 .formLogin(form -> form
                         .loginPage("/login").permitAll())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

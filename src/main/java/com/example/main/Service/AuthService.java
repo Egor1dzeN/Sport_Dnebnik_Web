@@ -5,6 +5,7 @@ import com.example.main.Entity.User;
 import com.example.main.Object.JwtTokenResponse;
 import com.example.main.Object.SignInRequest;
 import com.example.main.Object.SignUpRequest;
+import com.example.main.Repository.UserRepository;
 import com.example.main.enums.VkAuth;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
+    private final UserRepository userRepository;
 
     public JwtTokenResponse signUp(SignUpRequest request){
         var user = new User();
@@ -53,14 +55,18 @@ public class AuthService {
         return null;
     }
     public JwtTokenResponse signInVk(String username){
+        System.out.println("asdhyasgdytgasdt7ygasd");
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(
-                username,null
+                username,""
         ));
+        System.out.println("dauyihsdayusgda");
         if (authentication.isAuthenticated()) {
             var user = userService.userDetailsService().loadUserByUsername(username);
             var jwt = jwtService.generateToken(user);
+            System.out.println("JWT - "+jwt);
             return new JwtTokenResponse(jwt);
         }
+        System.out.println("NO JWT");
         return null;
     }
 }

@@ -1,8 +1,9 @@
 package com.example.main.Service;
 
+import com.example.main.Entity.VkUser;
 import com.example.main.Object.PayloadVK;
-import com.example.main.Object.VkUser;
-import com.example.main.Repository.VkPreAuthorizeRepository;
+import com.example.main.Object.VkUserResponse;
+import com.example.main.Repository.VkUserRepository;
 import com.example.main.VK.AnswerVK_accessToken;
 import com.google.gson.Gson;
 import lombok.Data;
@@ -20,42 +21,48 @@ public class VkAuthService {
     @Value("${vk.token}")
     private String service_token;
     private final Gson gson;
-    private final VkPreAuthorizeRepository vkPreAuthorizeRepository;
+    private final VkUserRepository vkUserRepository;
+    private final GenerateRandomStringService generateRandomStringService;
 
-    public VkUser authWithVK(String payloadStr){
+    public VkUser authWithVK(String payloadStr) {
         Gson gson = new Gson();
         PayloadVK payload = gson.fromJson(payloadStr, PayloadVK.class);
         System.out.println(payload);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         String url = "https://api.vk.com/method/auth.exchangeSilentAuthToken";
-        String query = "v=5.131&token="+payload.getToken()+"&access_token="+service_token+"&uuid="+payload.getUuid();
-        System.out.println(url+" !! "+query);
+        String query = "v=5.131&token=" + payload.getToken() + "&access_token=" + service_token + "&uuid=" + payload.getUuid();
+        System.out.println(url + " !! " + query);
         HttpEntity<String> requestEntity = new HttpEntity<>(query, headers);
         System.out.println(requestEntity);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-        VkUser vkUser = null;
+
         if (response.getStatusCode() == HttpStatus.OK) {
             AnswerVK_accessToken answerVKAccessToken = gson.fromJson(response.getBody(), AnswerVK_accessToken.class);
             System.out.println(answerVKAccessToken);
-            vkUser = getUserFromVk(answerVKAccessToken.getAccessToken(), answerVKAccessToken.getUserId());
-            if (vkPreAuthorizeRepository.existsByVkUserId(vkUser.getId())){
-                vkUser.setCreated(true);
+            VkUserResponse vkUserResponse = getUserFromVk(answerVKAccessToken.getAccessToken(), answerVKAccessToken.getUserId());
+
+            if (vkUserRepository.existsByUserVkId(vkUserResponse.getId())) {
+                VkUser vkUser = vkUserRepository.findAllByUserVkId(vkUserResponse.getId());
+                return vkUser;
+            } else {
+                VkUser vkUser = new VkUser(vkUserResponse.getFirst_name(), vkUserResponse.getLast_name(), vkUserResponse.getId());
+                String secretKey = generateRandomStringService.generateRandomString(20);
+                vkUser.setSecretKey(secretKey);
+                vkUserRepository.save(vkUser);
                 return vkUser;
             }
-            else{
-                vkUser.setCreated(false);
-                return vkUser;
-            }
+
         } else {
             System.out.println("Failed to send data: " + response.getStatusCode());
         }
         return null;
     }
-    private VkUser getUserFromVk(String accessToken, Long userId){
+
+    private VkUserResponse getUserFromVk(String accessToken, Long userId) {
         String url = "https://api.vk.com/method/users.get";
-        String query="v=5.199&access_token="+accessToken+"&user_ids="+userId;
+        String query = "v=5.199&access_token=" + accessToken + "&user_ids=" + userId;
         System.out.println(accessToken);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -69,8 +76,9 @@ public class VkAuthService {
         return response1.getResponse().getFirst();
     }
 }
+
 @Data
-class Response{
-    List<VkUser> response;
+class Response {
+    List<VkUserResponse> response;
 }
 

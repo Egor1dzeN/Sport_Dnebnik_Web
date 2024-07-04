@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "user1")
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -24,13 +25,20 @@ public class User implements UserDetails {
     private String name;
     private String surname;
     private String email;
-    public String vkId;
+    private Long vkId;
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    public User(String username, String name, String surname,  Long vkId) {
+        this.username = username;
+        this.name = name;
+        this.surname = surname;
+        this.vkId = vkId;
     }
 
     @Override
