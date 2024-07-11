@@ -1,0 +1,47 @@
+.container {
+    width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+.workout-card {
+    background: #ffffff;
+    border: 1px solid #6c6c6c;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 900px;
+    margin: 20px auto;
+}
+.workout-card h2 {
+    margin-top: 0;
+}
+.workout-info {
+    /*display: flex;*/
+    justify-content: space-between;
+    margin: 10px 0;
+}
+.workout-info div {
+    flex: 1;
+    padding: 5px;
+}
+.likes-comments {
+    display: flex;
+    justify-content: space-between;
+}
+.likes-comments button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.likes-comments button:hover {
+    background: #0056b3;
+}
+.comments {
+    margin-top: 20px;
+}
+.comment {
+    border-top: 1px solid #ddd;
+    padding: 10px 0;
+}

@@ -48,7 +48,7 @@ public class ForTest {
     }
     @GetMapping("/test")
     public String method1(){
-        return "add_training";
+        return "add_training/add_training";
     }
 
 

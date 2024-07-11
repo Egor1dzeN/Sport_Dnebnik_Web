@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/v1/**", "/sign-in", "/sign-up", "/login", "/a", "/vk.auth", "/test").permitAll()
+                        .requestMatchers("/v1/**", "/sign-in", "/sign-up", "/login", "/a", "/vk.auth", "/test", "/content/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/vk.auth").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(menager -> menager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -4,11 +4,11 @@
     <meta charset="UTF-8"/>
     <title>Add training</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="../reset.min.css"/>
-    <link rel="stylesheet" href="../style.css"/>
-    <link rel="stylesheet" href="../news.css"/>
-    <link rel="stylesheet" href="../trainings.css">
-    <link rel="stylesheet" th:href="@{/add_training.css}">
+    <link rel="stylesheet" href="/content/reset.min.css"/>
+    <link rel="stylesheet" href="/content/style.css"/>
+    <link rel="stylesheet" href="/content/news.css"/>
+    <link rel="stylesheet" href="/content/trainings.css">
+    <link rel="stylesheet" th:href="@{/content/add_training/add_training.css}">
 
 </head>
 <body>
@@ -40,7 +40,7 @@
                     </button>
                     <ul class="nav__wrapper">
                         <li class="nav__item"><a href="/">Главная</a></li>
-                        <li class="nav__item"><a href="/add_training">Добавить тренировку</a></li>
+                        <li class="nav__item"><a href="/add_training" style="font-weight: bold; pointer-events: none;" >Добавить тренировку</a></li>
 <!--                        <li class="nav__item"><a href="#">Services</a></li>-->
 <!--                        <li class="nav__item"><a href="#">Hire us</a></li>-->
 <!--                        <li class="nav__item"><a href="#">Contact</a></li>-->
@@ -143,6 +143,6 @@
     //     alert('Данные тренировки загружены успешно!');
     // });
 </script>
-<script src="add_training.js"></script>
+<script src="/content/add_training.js"></script>
 </body>
 </html>
