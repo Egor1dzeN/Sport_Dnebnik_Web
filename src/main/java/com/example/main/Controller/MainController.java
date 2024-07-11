@@ -1,5 +1,6 @@
 package com.example.main.Controller;
 
+import com.example.main.Entity.Role;
 import com.example.main.Object.JwtTokenResponse;
 import com.example.main.Object.SignInRequest;
 import com.example.main.Object.SignUpRequest;
@@ -26,20 +27,8 @@ public class MainController {
         model.addAttribute("key_vk", "123451");
         return "login";
     }
-    @PostMapping("/sign-in")
-    public String signIn(@ModelAttribute SignInRequest signInRequest, HttpServletResponse response){
-        JwtTokenResponse tokenResponse = authService.signIn(signInRequest);
-        if (tokenResponse != null){
-            cookieService.addCookie(response, tokenResponse);
-            return "redirect:/";
-        }
-        return "redirect:/login";
-    }
-    @GetMapping("/logout1")
-    public String logout(HttpServletResponse response, Principal principal){
-        cookieService.removeCookie(response);
-        return "redirect:/login";
-    }
+
+
     @GetMapping("/sign-up")
     public String signUp(){
         return "signUp";

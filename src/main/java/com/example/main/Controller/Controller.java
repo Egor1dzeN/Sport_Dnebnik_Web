@@ -59,27 +59,8 @@ public class Controller {
 
     }
 
-    @PostMapping("/vk.auth")
-    public String authVk(@ModelAttribute PayloadVkAuth payloadVkAuth, HttpServletResponse response) {
-        String username = payloadVkAuth.getUsername();
-        String secretKey = payloadVkAuth.getSecretKey();
-        System.out.println(payloadVkAuth);
-        VkUser vkUser = vkUserRepository.findBySecretKey(secretKey);
-        System.out.println(vkUser);
-        User user = new User(username, vkUser.getFirstName(), vkUser.getLastName(), vkUser.getUserVkId());
-        user.setRole(Role.ROLE_USER);
-        userRepository.save(user);
-        System.out.println(user);
-        JwtTokenResponse jwtTokenResponse = new JwtTokenResponse(jwtService.generateToken(username));
-        cookieService.addCookie(response, jwtTokenResponse);
-        System.out.println(jwtTokenResponse);
-        return "redirect:/";
-    }
 
-    @GetMapping("/test")
-    public String forAll() {
-        return "test";
-    }
+
 
     @GetMapping("/test1")
     public String forAll2(Principal principal) {
