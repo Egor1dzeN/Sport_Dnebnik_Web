@@ -2,11 +2,13 @@ package com.example.main.Service;
 
 import com.example.main.Entity.Training;
 import com.example.main.Entity.User;
+import com.example.main.Object.TrainingWithUsername;
 import com.example.main.Repository.TrainingRepository;
 import com.example.main.Repository.UserRepository;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,10 +21,16 @@ public class TrainingService {
         User user = userRepository.findByUsername(username).orElseThrow();
         training.setUser(user);
         trainingRepository.save(training);
-        System.out.println("Training is saved "+training);
+        System.out.println("Training is saved " + training);
     }
-    public List<Training> getAllTraining(){
-       List<Training> list =  trainingRepository.findAll();
+
+    public List<TrainingWithUsername> getAllTraining() {
+        List<TrainingWithUsername> list = trainingRepository.findAllTraining();
+        System.out.println(list);
+        return list;
+    }
+    public List<TrainingWithUsername> findTrainingByUserId(Long userId){
+        List<TrainingWithUsername> list = trainingRepository.findAllByUserId(userId);
         System.out.println(list);
         return list;
     }

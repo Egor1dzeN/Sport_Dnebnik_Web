@@ -2,6 +2,7 @@ package com.example.main.Controller;
 
 
 import com.example.main.Entity.Training;
+import com.example.main.Object.TrainingWithUsername;
 import com.example.main.Service.TrainingService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 @Data
 public class ForTest {
     private final TrainingService trainingService;
+
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFound(Model model) {
@@ -33,24 +35,35 @@ public class ForTest {
     }
 
     @PostMapping("/v1/training/v1/create")
+    @ResponseBody
     public ResponseEntity<Void> method2(@RequestBody Training training) {
         trainingService.saveTraining(training, "e");
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping("/v1/training/v1/get_all")
-    public ResponseEntity<List<Training>> getAllTrainings(){
+    @ResponseBody
+    public ResponseEntity<List<TrainingWithUsername>> getAllTrainings() {
         return new ResponseEntity<>(trainingService.getAllTraining(), HttpStatus.OK);
     }
+
     @GetMapping("/v1/training/test")
-    public ResponseEntity<String> getAllTrainings1(){
+    @ResponseBody
+    public ResponseEntity<String> getAllTrainings1() {
         System.out.println("XSS ATACK");
         return new ResponseEntity<>("ahhshsh", HttpStatus.OK);
     }
+
     @GetMapping("/test")
-    public String method1(){
+    public String method1() {
         return "add_training/add_training";
     }
 
+    @GetMapping("/v1/training/v1/findByUserId")
+    @ResponseBody
+    public ResponseEntity<List<TrainingWithUsername>> findTrainingByUser(@RequestParam(name = "user_id") Long userId) {
+        return new ResponseEntity<>(trainingService.findTrainingByUserId(userId), HttpStatus.OK);
+    }
 
 
 }
