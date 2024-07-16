@@ -50,7 +50,7 @@ public class ForTest {
     @GetMapping("/v1/training/test")
     @ResponseBody
     public ResponseEntity<String> getAllTrainings1() {
-        System.out.println("XSS ATACK");
+//        System.out.println("XSS ATACK");
         return new ResponseEntity<>("ahhshsh", HttpStatus.OK);
     }
 

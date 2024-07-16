@@ -15,28 +15,38 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    public User save(User user){
+
+    public User save(User user) {
         return userRepository.save(user);
     }
-    public User create(User user){
+
+    public User create(User user) {
         if (userRepository.existsByUsername(user.getUsername()))
             return null;
         if (userRepository.existsByEmail(user.getEmail()))
             return null;
         return save(user);
     }
-    public User getUserByUsername(String username){
-        System.out.println(username);
+
+    public User getUserByUsername(String username) {
+//        System.out.println(username);
         return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User wasn't find"));
     }
-    public UserDetailsService userDetailsService(){
+
+    public User getUserById(Long id) {
+        return userRepository.findAllById(id);
+    }
+
+    public UserDetailsService userDetailsService() {
         return this::getUserByUsername;
     }
-    public User getCurrentUser(){
+
+    public User getCurrentUser() {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
         return getUserByUsername(username);
     }
-    public void getAdmin(){
+
+    public void getAdmin() {
         var user = getCurrentUser();
         user.setRole(Role.ROLE_ADMIN);
         save(user);

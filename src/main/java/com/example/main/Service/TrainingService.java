@@ -21,17 +21,17 @@ public class TrainingService {
         User user = userRepository.findByUsername(username).orElseThrow();
         training.setUser(user);
         trainingRepository.save(training);
-        System.out.println("Training is saved " + training);
+//        System.out.println("Training is saved " + training);
     }
 
     public List<TrainingWithUsername> getAllTraining() {
         List<TrainingWithUsername> list = trainingRepository.findAllTraining();
-        System.out.println(list);
+//        System.out.println(list);
         return list;
     }
     public List<TrainingWithUsername> findTrainingByUserId(Long userId){
         List<TrainingWithUsername> list = trainingRepository.findAllByUserId(userId);
-        System.out.println(list);
+//        System.out.println(list);
         return list;
     }
 }

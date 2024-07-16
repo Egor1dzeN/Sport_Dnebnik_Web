@@ -53,8 +53,8 @@ public class SecurityConfiguration {
                 .sessionManagement(menager -> menager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
 //                .httpBasic(Customizer.withDefaults())
-                .formLogin(form -> form
-                        .loginPage("/login").permitAll())
+//                .formLogin(form -> form
+//                        .loginPage("/login").permitAll())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
