@@ -22,25 +22,7 @@ import java.security.Principal;
 public class MainController {
     private final AuthService authService;
     private final CookieService cookieService;
-    @GetMapping("/login")
-    public String method3(Model model){
-        model.addAttribute("key_vk", "123451");
-        return "login";
-    }
 
-
-    @GetMapping("/sign-up")
-    public String signUp(){
-        return "signUp";
-    }
-    @PostMapping("/sign-up")
-    public String signUp(@ModelAttribute SignUpRequest request) {
-        System.out.println(request);
-        JwtTokenResponse tokenResponse = authService.signUp(request);
-        if (tokenResponse == null)
-            return "redirect:/sign-up";
-        return "redirect:/login";
-    }
 
 }
 

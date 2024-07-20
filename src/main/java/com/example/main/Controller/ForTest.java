@@ -2,9 +2,15 @@ package com.example.main.Controller;
 
 
 import com.example.main.Entity.Training;
+import com.example.main.MyException.UserNotFoundException;
 import com.example.main.Object.TrainingWithUsername;
 import com.example.main.Service.TrainingService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.Data;
+import org.springdoc.api.ErrorMessage;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,9 +42,13 @@ public class ForTest {
 
     @PostMapping("/v1/training/v1/create")
     @ResponseBody
-    public ResponseEntity<Void> method2(@RequestBody Training training) {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201",description = "TEST")
+    })
+    @Operation(description = "Method for create training")
+    public ResponseEntity<Void> method2(@RequestBody Training training){ //ToDo: Principal principal
         trainingService.saveTraining(training, "e");
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/v1/training/v1/get_all")

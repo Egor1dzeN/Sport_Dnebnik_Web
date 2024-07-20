@@ -15,6 +15,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -56,6 +57,25 @@ public class AuthController {
     @GetMapping("/logout")
     public String logout(HttpServletResponse response, Principal principal){
         cookieService.removeCookie(response);
+        return "redirect:/login";
+    }
+    @GetMapping("/login")
+    public String method3(Model model){
+        model.addAttribute("key_vk", "123451");
+        return "login";
+    }
+
+
+    @GetMapping("/sign-up")
+    public String signUp(){
+        return "signUp";
+    }
+    @PostMapping("/sign-up")
+    public String signUp(@ModelAttribute SignUpRequest request) {
+        System.out.println(request);
+        JwtTokenResponse tokenResponse = authService.signUp(request);
+        if (tokenResponse == null)
+            return "redirect:/sign-up";
         return "redirect:/login";
     }
 

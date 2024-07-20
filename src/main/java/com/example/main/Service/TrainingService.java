@@ -2,10 +2,12 @@ package com.example.main.Service;
 
 import com.example.main.Entity.Training;
 import com.example.main.Entity.User;
+import com.example.main.MyException.UserNotFoundException;
 import com.example.main.Object.TrainingWithUsername;
 import com.example.main.Repository.TrainingRepository;
 import com.example.main.Repository.UserRepository;
 import lombok.Data;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,8 +19,8 @@ public class TrainingService {
     private final UserRepository userRepository;
     private final TrainingRepository trainingRepository;
 
-    public void saveTraining(Training training, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
+    public void saveTraining(Training training, String username){
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User wasn't found, username - " + username));
         training.setUser(user);
         trainingRepository.save(training);
 //        System.out.println("Training is saved " + training);
