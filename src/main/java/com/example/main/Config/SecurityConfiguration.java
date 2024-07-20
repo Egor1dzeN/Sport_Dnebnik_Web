@@ -47,7 +47,8 @@ public class SecurityConfiguration {
                 }))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/v1/**", "/sign-in", "/v1/training/v1/get_all",
-                                "/sign-up", "/login", "/a", "/vk.auth", "/test", "/content/**").permitAll()
+                                "/sign-up", "/login", "/a", "/vk.auth", "/test",
+                                "/content/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/vk.auth").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(menager -> menager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

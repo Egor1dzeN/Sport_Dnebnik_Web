@@ -20,7 +20,7 @@ import java.util.List;
 public class VkAuthService {
     @Value("${vk.token}")
     private String service_token;
-    private final Gson gson;
+    private final Gson gson = new Gson();
     private final VkUserRepository vkUserRepository;
     private final GenerateRandomStringService generateRandomStringService;
 
