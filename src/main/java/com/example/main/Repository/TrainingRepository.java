@@ -1,7 +1,7 @@
 package com.example.main.Repository;
 
-import com.example.main.Entity.Training;
-import com.example.main.Object.TrainingWithUsername;
+import com.example.main.domain.Entity.Training;
+import com.example.main.domain.DTO.TrainingWithUsername;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

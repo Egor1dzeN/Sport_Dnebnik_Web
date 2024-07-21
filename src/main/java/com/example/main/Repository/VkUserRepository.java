@@ -1,6 +1,6 @@
 package com.example.main.Repository;
 
-import com.example.main.Entity.VkUser;
+import com.example.main.domain.Entity.VkUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VkUserRepository extends JpaRepository<VkUser, Long> {

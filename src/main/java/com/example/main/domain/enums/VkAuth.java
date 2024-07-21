@@ -1,4 +1,4 @@
-package com.example.main.enums;
+package com.example.main.domain.enums;
 
 public enum VkAuth {
     CREATE(),

@@ -1,10 +1,7 @@
 package com.example.main.Controller;
 
-import com.example.main.Entity.Comment;
-import com.example.main.Entity.User;
-import com.example.main.Object.CommentText;
+import com.example.main.domain.Entity.Comment;
 import com.example.main.Service.CommentService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

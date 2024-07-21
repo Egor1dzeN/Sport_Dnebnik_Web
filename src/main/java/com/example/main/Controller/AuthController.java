@@ -1,17 +1,16 @@
 package com.example.main.Controller;
 
-import com.example.main.Entity.Role;
-import com.example.main.Entity.User;
-import com.example.main.Entity.VkUser;
-import com.example.main.Object.JwtTokenResponse;
-import com.example.main.Object.SignInRequest;
-import com.example.main.Object.SignUpRequest;
+import com.example.main.domain.Entity.Role;
+import com.example.main.domain.Entity.User;
+import com.example.main.domain.Entity.VkUser;
+import com.example.main.domain.DTO.JwtTokenResponse;
+import com.example.main.domain.DTO.SignInRequest;
+import com.example.main.domain.DTO.SignUpRequest;
 import com.example.main.Repository.UserRepository;
 import com.example.main.Repository.VkUserRepository;
 import com.example.main.Service.AuthService;
 import com.example.main.Service.CookieService;
 import com.example.main.Service.JwtService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
 import org.springframework.stereotype.Controller;

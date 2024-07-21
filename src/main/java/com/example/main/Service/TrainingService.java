@@ -1,16 +1,14 @@
 package com.example.main.Service;
 
-import com.example.main.Entity.Training;
-import com.example.main.Entity.User;
+import com.example.main.domain.Entity.Training;
+import com.example.main.domain.Entity.User;
 import com.example.main.MyException.UserNotFoundException;
-import com.example.main.Object.TrainingWithUsername;
+import com.example.main.domain.DTO.TrainingWithUsername;
 import com.example.main.Repository.TrainingRepository;
 import com.example.main.Repository.UserRepository;
 import lombok.Data;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

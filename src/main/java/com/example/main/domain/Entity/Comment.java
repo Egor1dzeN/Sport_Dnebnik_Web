@@ -1,8 +1,7 @@
-package com.example.main.Entity;
+package com.example.main.domain.Entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 

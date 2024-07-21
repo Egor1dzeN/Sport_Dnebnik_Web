@@ -1,16 +1,14 @@
 package com.example.main.Service;
 
-import com.example.main.Entity.Comment;
-import com.example.main.Entity.Training;
-import com.example.main.Entity.User;
+import com.example.main.domain.Entity.Comment;
+import com.example.main.domain.Entity.Training;
+import com.example.main.domain.Entity.User;
 import com.example.main.Repository.CommentRepository;
 import com.example.main.Repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

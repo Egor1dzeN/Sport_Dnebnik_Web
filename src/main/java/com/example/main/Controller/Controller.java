@@ -1,11 +1,9 @@
 package com.example.main.Controller;
 
 
-import com.example.main.Entity.Role;
-import com.example.main.Entity.User;
-import com.example.main.Entity.VkUser;
-import com.example.main.Object.JwtTokenResponse;
-import com.example.main.Object.VkUserResponse;
+import com.example.main.domain.Entity.User;
+import com.example.main.domain.Entity.VkUser;
+import com.example.main.domain.DTO.JwtTokenResponse;
 import com.example.main.Repository.UserRepository;
 import com.example.main.Repository.VkUserRepository;
 import com.example.main.Service.AuthService;
@@ -17,8 +15,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;

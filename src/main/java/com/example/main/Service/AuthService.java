@@ -1,18 +1,16 @@
 package com.example.main.Service;
 
-import com.example.main.Entity.Role;
-import com.example.main.Entity.User;
-import com.example.main.Object.JwtTokenResponse;
-import com.example.main.Object.SignInRequest;
-import com.example.main.Object.SignUpRequest;
+import com.example.main.domain.Entity.Role;
+import com.example.main.domain.Entity.User;
+import com.example.main.domain.DTO.JwtTokenResponse;
+import com.example.main.domain.DTO.SignInRequest;
+import com.example.main.domain.DTO.SignUpRequest;
 import com.example.main.Repository.UserRepository;
-import com.example.main.enums.VkAuth;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.example.main.Service;
 
-import com.example.main.Entity.Role;
-import com.example.main.Entity.User;
+import com.example.main.domain.Entity.Role;
+import com.example.main.domain.Entity.User;
 import com.example.main.Repository.UserRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

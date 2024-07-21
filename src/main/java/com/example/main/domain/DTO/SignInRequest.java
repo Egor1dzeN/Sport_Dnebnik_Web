@@ -1,6 +1,5 @@
-package com.example.main.Object;
+package com.example.main.domain.DTO;
 
-import io.jsonwebtoken.Jwts;
 import lombok.Data;
 
 @Data

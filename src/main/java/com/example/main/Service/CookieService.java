@@ -1,6 +1,6 @@
 package com.example.main.Service;
 
-import com.example.main.Object.JwtTokenResponse;
+import com.example.main.domain.DTO.JwtTokenResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseCookie;

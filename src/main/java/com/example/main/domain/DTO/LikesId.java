@@ -1,4 +1,4 @@
-package com.example.main.Object;
+package com.example.main.domain.DTO;
 
 import java.io.Serializable;
 

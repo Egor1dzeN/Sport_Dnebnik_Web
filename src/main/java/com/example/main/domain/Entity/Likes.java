@@ -1,6 +1,5 @@
-package com.example.main.Entity;
+package com.example.main.domain.Entity;
 
-import com.example.main.Object.LikesId;
 import jakarta.persistence.*;
 // ToDo: add likes for training
 @Entity

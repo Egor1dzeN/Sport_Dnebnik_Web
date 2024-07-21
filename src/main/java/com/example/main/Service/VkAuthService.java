@@ -1,10 +1,10 @@
 package com.example.main.Service;
 
-import com.example.main.Entity.VkUser;
-import com.example.main.Object.PayloadVK;
-import com.example.main.Object.VkUserResponse;
+import com.example.main.domain.Entity.VkUser;
+import com.example.main.domain.DTO.PayloadVK;
+import com.example.main.domain.DTO.VkUserResponse;
 import com.example.main.Repository.VkUserRepository;
-import com.example.main.VK.AnswerVK_accessToken;
+import com.example.main.domain.DTO.AnswerVK_accessToken;
 import com.google.gson.Gson;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

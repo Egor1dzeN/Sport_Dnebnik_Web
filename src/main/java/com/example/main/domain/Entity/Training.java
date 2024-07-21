@@ -1,8 +1,7 @@
-package com.example.main.Entity;
+package com.example.main.domain.Entity;
 
-import com.example.main.enums.TypeTraining;
+import com.example.main.domain.enums.TypeTraining;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import lombok.Data;
 

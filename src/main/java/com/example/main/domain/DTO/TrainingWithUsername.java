@@ -1,6 +1,6 @@
-package com.example.main.Object;
+package com.example.main.domain.DTO;
 
-import com.example.main.enums.TypeTraining;
+import com.example.main.domain.enums.TypeTraining;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
