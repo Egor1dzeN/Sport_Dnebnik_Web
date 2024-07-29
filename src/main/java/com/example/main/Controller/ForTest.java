@@ -39,40 +39,7 @@ public class ForTest {
         return new ResponseEntity<>("HELLO", HttpStatus.OK);
     }
 
-    @PostMapping("/v1/training/v1/create")
-    @ResponseBody
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201",description = "TEST")
-    })
-    @Operation(description = "Method for create training")
-    public ResponseEntity<Void> method2(@RequestBody Training training){ //ToDo: Principal principal
-        trainingService.saveTraining(training, "e");
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
 
-    @GetMapping("/v1/training/v1/get_all")
-    @ResponseBody
-    public ResponseEntity<List<TrainingWithUsername>> getAllTrainings() {
-        return new ResponseEntity<>(trainingService.getAllTraining(), HttpStatus.OK);
-    }
-
-    @GetMapping("/v1/training/test")
-    @ResponseBody
-    public ResponseEntity<String> getAllTrainings1() {
-//        System.out.println("XSS ATACK");
-        return new ResponseEntity<>("ahhshsh", HttpStatus.OK);
-    }
-
-    @GetMapping("/test")
-    public String method1() {
-        return "add_training/add_training";
-    }
-
-    @GetMapping("/v1/training/v1/findByUserId")
-    @ResponseBody
-    public ResponseEntity<List<TrainingWithUsername>> findTrainingByUser(@RequestParam(name = "user_id") Long userId) {
-        return new ResponseEntity<>(trainingService.findTrainingByUserId(userId), HttpStatus.OK);
-    }
 
 
 }

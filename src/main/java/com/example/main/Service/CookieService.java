@@ -8,8 +8,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CookieService {
+    public static String TOKEN_AUTH_STR = "Session_id";
     public void addCookie(HttpServletResponse response, JwtTokenResponse tokenResponse) {
-        ResponseCookie cookie = ResponseCookie.from("auth", tokenResponse.getToken())
+        ResponseCookie cookie = ResponseCookie.from(TOKEN_AUTH_STR, tokenResponse.getToken())
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
@@ -19,7 +20,7 @@ public class CookieService {
     }
 
     public void removeCookie(HttpServletResponse response) {
-        Cookie cookie = new Cookie("auth", null);
+        Cookie cookie = new Cookie(TOKEN_AUTH_STR, null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
     }

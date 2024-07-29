@@ -1,5 +1,6 @@
 package com.example.main.Controller;
 
+import com.example.main.MyException.UserAlreadyExistException;
 import com.example.main.MyException.UserNotFoundException;
 import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,13 @@ public class ExceptionController {
     public ResponseEntity<?> handleException(UserNotFoundException userNotFoundException) {
         var map = new HashMap<String, String>();
         map.put("error_msg", userNotFoundException.getMessage());
+        return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
+    }
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<?> handleUserAlreadyExistException(UserAlreadyExistException userAlreadyExistException) {
+        var map = new HashMap<String, String>();
+        map.put("error_msg", userAlreadyExistException.getMessage());
         return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
     }
 }

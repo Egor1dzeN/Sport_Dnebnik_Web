@@ -1,5 +1,6 @@
 package com.example.main.Service;
 
+import com.example.main.MyException.UserAlreadyExistException;
 import com.example.main.domain.Entity.Role;
 import com.example.main.domain.Entity.User;
 import com.example.main.domain.DTO.JwtTokenResponse;
@@ -14,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Data
 @RequiredArgsConstructor
@@ -25,6 +28,10 @@ public class AuthService {
     private final UserRepository userRepository;
 
     public JwtTokenResponse signUp(SignUpRequest request){
+        if (userRepository.existsByUsername(request.getUsername())){
+            throw new UserAlreadyExistException("User with this username is already exist :( ");
+        }
+
         var user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -40,17 +47,21 @@ public class AuthService {
         System.out.println(jwt);
         return new JwtTokenResponse(jwt);
     }
-    public JwtTokenResponse signIn(SignInRequest request){
+    public Optional<JwtTokenResponse> signIn(SignInRequest request){
+        System.out.println("Sign In" + request);
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
                 request.getPassword()
         ));
+
         if (authentication.isAuthenticated()) {
             var user = userService.userDetailsService().loadUserByUsername(request.getUsername());
-            var jwt = jwtService.generateToken(user);
-            return new JwtTokenResponse(jwt);
+            var jwt = new JwtTokenResponse(jwtService.generateToken(user));
+            System.out.println("Not empty");
+            return Optional.of(jwt);
         }
-        return null;
+        System.out.println("empty");
+        return Optional.empty();
     }
     public JwtTokenResponse signInVk(String username){
         System.out.println("asdhyasgdytgasdt7ygasd");

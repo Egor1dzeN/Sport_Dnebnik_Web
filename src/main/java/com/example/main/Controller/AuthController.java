@@ -1,5 +1,6 @@
 package com.example.main.Controller;
 
+import com.example.main.MyException.UserNotFoundException;
 import com.example.main.domain.Entity.Role;
 import com.example.main.domain.Entity.User;
 import com.example.main.domain.Entity.VkUser;
@@ -13,11 +14,14 @@ import com.example.main.Service.CookieService;
 import com.example.main.Service.JwtService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @Data
@@ -27,6 +31,7 @@ public class AuthController {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final CookieService cookieService;
+
     // Todo: add description endpoint method
     @PostMapping("/vk.auth")
     public String authVk(@ModelAttribute PayloadVkAuth payloadVkAuth, HttpServletResponse response) {
@@ -44,31 +49,40 @@ public class AuthController {
         System.out.println(jwtTokenResponse);
         return "redirect:/";
     }
+
     @PostMapping("/sign-in")
-    public String signIn(@ModelAttribute SignInRequest signInRequest, HttpServletResponse response){
-        JwtTokenResponse tokenResponse = authService.signIn(signInRequest);
-        if (tokenResponse != null){
-            cookieService.addCookie(response, tokenResponse);
-            return "redirect:/";
+    @ResponseBody
+    public ResponseEntity<JwtTokenResponse> signIn(@ModelAttribute SignInRequest signInRequest, HttpServletResponse response) {
+        Optional<JwtTokenResponse> tokenResponse = authService.signIn(signInRequest);
+        System.out.println(tokenResponse);
+        if (tokenResponse.isPresent()) {
+            cookieService.addCookie(response, tokenResponse.orElseThrow(() -> new UserNotFoundException("User wasn't found, username -" + signInRequest.getUsername())));
+        } else {
+            throw new UserNotFoundException("User wasn't found, username -" + signInRequest.getUsername());
         }
-        return "redirect:/login";
+        return new ResponseEntity<>(tokenResponse.get(), HttpStatus.OK);
+
+
     }
+
     @GetMapping("/logout")
-    public String logout(HttpServletResponse response, Principal principal){
+    public String logout(HttpServletResponse response, Principal principal) {
         cookieService.removeCookie(response);
         return "redirect:/login";
     }
+
     @GetMapping("/login")
-    public String method3(Model model){
+    public String method3(Model model) {
         model.addAttribute("key_vk", "123451");
         return "login";
     }
 
 
     @GetMapping("/sign-up")
-    public String signUp(){
+    public String signUp() {
         return "signUp";
     }
+
     @PostMapping("/sign-up")
     public String signUp(@ModelAttribute SignUpRequest request) {
         System.out.println(request);

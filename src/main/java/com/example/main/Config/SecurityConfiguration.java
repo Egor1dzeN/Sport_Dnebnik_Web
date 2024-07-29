@@ -31,6 +31,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     private final JwtAuthFilter jwtAuthFilter;
+    private final BearerTokenAuthFilter bearerTokenAuthFilter;
+
     private final UserService userService;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
@@ -51,12 +53,13 @@ public class SecurityConfiguration {
                                 "/content/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/vk.auth").permitAll()
                         .anyRequest().authenticated())
-                .sessionManagement(menager -> menager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
 //                .httpBasic(Customizer.withDefaults())
 //                .formLogin(form -> form
 //                        .loginPage("/login").permitAll())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(bearerTokenAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

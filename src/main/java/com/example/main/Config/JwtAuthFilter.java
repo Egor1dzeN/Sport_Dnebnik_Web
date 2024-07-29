@@ -1,5 +1,6 @@
 package com.example.main.Config;
 
+import com.example.main.Service.CookieService;
 import com.example.main.Service.JwtService;
 import com.example.main.Service.UserService;
 import jakarta.servlet.FilterChain;
@@ -47,7 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         null,
                         userDetails.getAuthorities()
                 );
-                System.out.println("AUTH is ok!");
+//                System.out.println("AUTH is ok!");
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
@@ -60,7 +61,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     public String extractAuthToken(Cookie[] cookies) {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("auth")) {
+                if (cookie.getName().equals(CookieService.TOKEN_AUTH_STR)) {
                     return cookie.getValue();
                 }
             }
