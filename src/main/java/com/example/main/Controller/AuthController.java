@@ -27,7 +27,7 @@ public class AuthController {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final CookieService cookieService;
-
+    // Todo: add description endpoint method
     @PostMapping("/vk.auth")
     public String authVk(@ModelAttribute PayloadVkAuth payloadVkAuth, HttpServletResponse response) {
         String username = payloadVkAuth.getUsername();

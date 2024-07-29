@@ -23,7 +23,7 @@ public class VkAuthService {
     private final Gson gson = new Gson();
     private final VkUserRepository vkUserRepository;
     private final GenerateRandomStringService generateRandomStringService;
-
+    //ToDo: change to last SDK version https://dev.vk.com/ru/sdk/java
     public VkUser authWithVK(String payloadStr) {
         Gson gson = new Gson();
         PayloadVK payload = gson.fromJson(payloadStr, PayloadVK.class);
