@@ -12,6 +12,7 @@ import com.example.main.Repository.VkUserRepository;
 import com.example.main.Service.AuthService;
 import com.example.main.Service.CookieService;
 import com.example.main.Service.JwtService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -84,7 +85,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public String signUp(@ModelAttribute SignUpRequest request) {
+    public String signUp(@ModelAttribute SignUpRequest request) throws MessagingException {
         System.out.println(request);
         JwtTokenResponse tokenResponse = authService.signUp(request);
         if (tokenResponse == null)

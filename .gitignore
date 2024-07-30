@@ -34,3 +34,4 @@ build/
 src/main/resources/database.properties
 src/main/resources/jwt.properties
 src/main/resources/vk.properties
+src/main/resources/test.properties

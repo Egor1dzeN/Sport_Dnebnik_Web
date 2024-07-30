@@ -1,5 +1,7 @@
 package com.example.main.Service;
 
+import com.example.main.MyException.UserAlreadyExistException;
+import com.example.main.MyException.UserEmailException;
 import com.example.main.domain.Entity.Role;
 import com.example.main.domain.Entity.User;
 import com.example.main.Repository.UserRepository;
@@ -9,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Data
@@ -22,15 +26,15 @@ public class UserService {
 
     public User create(User user) {
         if (userRepository.existsByUsername(user.getUsername()))
-            return null;
+            throw new UserAlreadyExistException("User with this username is already exist :(");
         if (userRepository.existsByEmail(user.getEmail()))
-            return null;
+            throw new UserEmailException("User with this username is already exist :(");
         return save(user);
     }
 
     public User getUserByUsername(String username) {
 //        System.out.println(username);
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User wasn't find"));
+        return userRepository.findByUsername(username);
     }
 
     public User getUserById(Long id) {

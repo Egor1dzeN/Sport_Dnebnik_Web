@@ -10,6 +10,7 @@ import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Data
@@ -18,7 +19,8 @@ public class TrainingService {
     private final TrainingRepository trainingRepository;
 
     public void saveTraining(Training training, String username){
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User wasn't found, username - " + username));
+        Optional<User> optionalUser = Optional.of(userRepository.findByUsername(username));
+        User user = optionalUser.orElseThrow(() -> new UserNotFoundException("User wasn't found, username - " + username));
         training.setUser(user);
         trainingRepository.save(training);
 //        System.out.println("Training is saved " + training);

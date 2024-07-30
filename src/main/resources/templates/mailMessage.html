@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf8"/>
+    <title>Sport Dnevnik Logo</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #4A90E2, #9013FE);
+            color: white;
+            text-align: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+        }
+
+        .logo h1 {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 4em;
+            margin: 0;
+        }
+
+        .logo p {
+            font-size: 1.5em;
+            margin: 0.5em 0;
+            letter-spacing: 0.1em;
+        }
+
+        .logo p span {
+            color: #FFD700;
+        }
+
+        .message {
+            margin: 1em 0;
+            font-size: 1.2em;
+        }
+
+        .confirm-button {
+            padding: 0.7em 2em;
+            font-size: 1em;
+            color: #4A90E2;
+            background-color: #FFD700;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .confirm-button:hover {
+            background-color: #4A90E2;
+            color: #FFD700;
+        }
+        a{
+            text-decoration: none;
+            color: #9c9c9c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="logo">
+    <h1>Sport Dnevnik</h1>
+    <p>Your daily sports journal <span>2024</span></p>
+</div>
+<div class="message">
+   <label th:text="${name}"></label> Thank you for registering on our website
+</div>
+<button class="confirm-button"><a href="https://www.papertoilet.com/">Confirm email</a></button>
+<span style="margin-top: 10px">
+    Or follow the <a href="https://www.papertoilet.com/">link</a>
+</span>
+</body>
+</html>
