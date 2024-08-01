@@ -68,9 +68,9 @@
 <div class="message">
    <label th:text="${name}"></label> Thank you for registering on our website
 </div>
-<button class="confirm-button"><a href="https://www.papertoilet.com/">Confirm email</a></button>
+<button class="confirm-button"><a th:href="'https://localhost/verify_account?access_token='+${access_token}">Confirm email</a></button>
 <span style="margin-top: 10px">
-    Or follow the <a href="https://www.papertoilet.com/">link</a>
+    Or follow the <a th:href="'https://localhost/verify_account?access_token='+${access_token}">link</a>
 </span>
 </body>
 </html>

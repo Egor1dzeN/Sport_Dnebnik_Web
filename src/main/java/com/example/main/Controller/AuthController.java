@@ -1,6 +1,10 @@
 package com.example.main.Controller;
 
+import com.example.main.MyException.InvalidDataException;
 import com.example.main.MyException.UserNotFoundException;
+import com.example.main.Repository.VerifyAccountRepository;
+import com.example.main.Service.VkAuthService;
+import com.example.main.domain.DTO.PayloadVkAuth;
 import com.example.main.domain.Entity.Role;
 import com.example.main.domain.Entity.User;
 import com.example.main.domain.Entity.VkUser;
@@ -15,6 +19,8 @@ import com.example.main.Service.JwtService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,7 +37,11 @@ public class AuthController {
     private final VkUserRepository vkUserRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final VkAuthService vkAuthService;
     private final CookieService cookieService;
+    private final VerifyAccountRepository verifyAccountRepository;
+
+    private final Logger logger = LogManager.getLogger(AuthController.class);
 
     // Todo: add description endpoint method
     @PostMapping("/vk.auth")
@@ -51,9 +61,30 @@ public class AuthController {
         return "redirect:/";
     }
 
+    @GetMapping("/vk.auth")
+    public String method2(
+            @RequestParam(value = "payload") String payloadStr, @RequestParam String state,
+            Principal principal, Model model, HttpServletResponse response) {
+        VkUser vkUser = vkAuthService.authWithVK(payloadStr);
+        System.out.println("VkUSER" + vkUser);
+        if (userRepository.existsByVkId(vkUser.getUserVkId())) {
+            System.out.println("AUTH VK");
+            User user = userRepository.findByVkId(vkUser.getUserVkId());
+            JwtTokenResponse jwtTokenResponse = new JwtTokenResponse(jwtService.generateToken(user.getUsername()));
+            cookieService.addCookie(response, jwtTokenResponse);
+            System.out.println(jwtTokenResponse);
+            return "redirect:/";
+        }
+        model.addAttribute("secretKey", vkUser.getSecretKey());
+        return "addUsername";
+
+
+    }
+
     @PostMapping("/sign-in")
     @ResponseBody
     public ResponseEntity<JwtTokenResponse> signIn(@ModelAttribute SignInRequest signInRequest, HttpServletResponse response) {
+        logger.info("{}", signInRequest);
         Optional<JwtTokenResponse> tokenResponse = authService.signIn(signInRequest);
         System.out.println(tokenResponse);
         if (tokenResponse.isPresent()) {
@@ -68,6 +99,7 @@ public class AuthController {
 
     @GetMapping("/logout")
     public String logout(HttpServletResponse response, Principal principal) {
+        logger.info("Logout {}", principal);
         cookieService.removeCookie(response);
         return "redirect:/login";
     }
@@ -85,12 +117,21 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public String signUp(@ModelAttribute SignUpRequest request) throws MessagingException {
+    @ResponseBody
+    public ResponseEntity<?> signUp(@ModelAttribute SignUpRequest request) throws MessagingException {
         System.out.println(request);
         JwtTokenResponse tokenResponse = authService.signUp(request);
         if (tokenResponse == null)
-            return "redirect:/sign-up";
-        return "redirect:/login";
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/verify_account")
+    @ResponseBody
+    public Long verifyAccount(@RequestParam(name = "access_token") String token) {
+        logger.info("Access token {}", token);
+        Optional<Long> id = verifyAccountRepository.findUserIdByAccessToken(token);
+        return id.orElseThrow(() -> new InvalidDataException("Access_token not found"));
     }
 
 }

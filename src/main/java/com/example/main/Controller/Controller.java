@@ -22,7 +22,7 @@ import java.security.Principal;
 @org.springframework.stereotype.Controller
 @RequiredArgsConstructor
 public class Controller {
-    private final VkAuthService vkAuthService;
+
     private final AuthService authService;
     private final UserRepository userRepository;
     private final CookieService cookieService;
@@ -30,29 +30,11 @@ public class Controller {
     private final JwtService jwtService;
 
     @GetMapping("/")
-    public String method(Model model) {
+    public String method(Model model, Principal principal) {
+        if (principal == null)
+            return "index_without_login";
         model.addAttribute("key_vk", "1234561");
         return "index";
-    }
-
-    @GetMapping("/vk.auth")
-    public String method2(
-            @RequestParam(value = "payload") String payloadStr, @RequestParam String state,
-            Principal principal, Model model, HttpServletResponse response) {
-        VkUser vkUser = vkAuthService.authWithVK(payloadStr);
-        System.out.println("VkUSER" + vkUser);
-        if (userRepository.existsByVkId(vkUser.getUserVkId())) {
-            System.out.println("AUTH VK");
-            User user = userRepository.findByVkId(vkUser.getUserVkId());
-            JwtTokenResponse jwtTokenResponse = new JwtTokenResponse(jwtService.generateToken(user.getUsername()));
-            cookieService.addCookie(response, jwtTokenResponse);
-            System.out.println(jwtTokenResponse);
-            return "redirect:/";
-        }
-        model.addAttribute("secretKey", vkUser.getSecretKey());
-        return "addUsername";
-
-
     }
 
 
@@ -69,8 +51,3 @@ public class Controller {
     }
 }
 
-@Data
-class PayloadVkAuth {
-    String username;
-    String secretKey;
-}

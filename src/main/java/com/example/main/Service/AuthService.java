@@ -1,7 +1,6 @@
 package com.example.main.Service;
 
-import com.example.main.MyException.UserAlreadyExistException;
-import com.example.main.MyException.UserEmailException;
+import com.example.main.MyException.InvalidDataException;
 import com.example.main.domain.Entity.Role;
 import com.example.main.domain.Entity.User;
 import com.example.main.domain.DTO.JwtTokenResponse;
@@ -30,10 +29,12 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
     private final UserRepository userRepository;
-    private final MailService mailService;
+    private final EmailService mailService;
     private static final Logger logger = LogManager.getLogger(AuthService.class);
 
     public JwtTokenResponse signUp(SignUpRequest request) throws MessagingException {
+        if (!mailService.isValidEmail(request.getEmail()))
+            throw new InvalidDataException("Unsuitable email");
         var user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -41,11 +42,11 @@ public class AuthService {
         user.setRole(Role.ROLE_USER);
         user.setName(request.getName());
         user.setSurname(request.getSurname());
-
+//        logger.info("New User -  {}", request.toString());
         User user1 = userService.create(user);
         String jwt = jwtService.generateToken(user1);
         logger.info("Send email {}", request.getEmail());
-        mailService.sendVerifyLink(request.getEmail());
+//        mailService.sendVerifyLink(request.getEmail());
         return new JwtTokenResponse(jwt);
     }
 

@@ -19,11 +19,13 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
+    @Column(unique = true)
     private String username;
     private String password;
     private String name;
     private String surname;
     private String email;
+    @Column(unique = true)
     private Long vkId;
     private String aboutMe;
     private boolean isVerifyAccount;
@@ -35,7 +37,7 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public User(String username, String name, String surname,  Long vkId) {
+    public User(String username, String name, String surname, Long vkId) {
         this.username = username;
         this.name = name;
         this.surname = surname;

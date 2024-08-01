@@ -1,5 +1,6 @@
 package com.example.main.Config;
 
+import com.example.main.Service.CookieService;
 import com.example.main.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -55,6 +56,9 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
+                .logout((logout) -> {
+                    logout.deleteCookies(CookieService.TOKEN_AUTH_STR);
+                })
 //                .httpBasic(Customizer.withDefaults())
 //                .formLogin(form -> form
 //                        .loginPage("/login").permitAll())
@@ -64,7 +68,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userService.userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -75,6 +79,7 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception {

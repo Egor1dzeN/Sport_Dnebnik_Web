@@ -1,17 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <link rel="stylesheet" href="content/login.css">
+    <title>Sign Up</title>
 </head>
 <body>
-<form method="post" action="/sign-up">
-    <input type="text" placeholder="username" name="username">
-    <input type="text" placeholder="password" name="password">
-    <input type="text" placeholder="email" name="email">
-    <input type="text" placeholder="name" name="name">
-    <input type="text" placeholder="surname" name="surname">
-    <button type="submit">Sign up!</button>
-</form>
+<div style="font-family: 'Brush Script MT', cursive;">
+    <h1>Sport Dnevnik</h1>
+</div>
+<div class="main">
+
+    <div>
+        <form id="form">
+            <div class="imgcontainer">
+                <!--                <img src="img_avatar2.png" alt="Avatar" class="avatar">-->
+            </div>
+
+            <div class="container">
+
+                <div id="error" style="background: #ff3b2e; width: auto; font-size: 18px; text-align: center; padding: 10px;border-radius: 10px; color: white; margin-bottom: 20px; display: none" >Login or password uncorrect</div>
+                <label for="uname"><b>Никнейм</b></label>
+                <input type="text" placeholder="Enter Username" name="username" id="uname" required>
+                <div style="display: flex; justify-content: left">
+                    <div style="width: 50%; margin-right: 30px">
+                        <label><b>Имя</b></label>
+                        <input type="text" placeholder="Enter name" name="name">
+                    </div>
+                    <div style="width: 50%">
+                        <label><b>Фамилия</b></label>
+                        <input type="text" placeholder="Enter surname" name="surname">
+                    </div>
+                </div>
+                <label><b>Email</b></label>
+                <input type="text" placeholder="Enter email" name="email" required>
+
+
+                <label for="password"><b>Пароль</b></label>
+                <input type="password" id="psw1" placeholder="Enter Password" name="password1" required>
+                <label for="password"><b>Пароль</b> <span style="font-size: 15px">еще раз</span></label>
+                <input type="password" id="psw2" placeholder="Enter Password again" name="password2" required>
+                <button type="submit" style="border-radius: 10px;font-weight: bold; font-size: 20px">Sign up</button>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" class="cancelbtn" id="cancel">Cancel</button>
+                <span class="psw">Уже есть аккаунт? <a href="/login">Войти</a></span>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>
+<script src="content/signUp.js"></script>
+
+
+

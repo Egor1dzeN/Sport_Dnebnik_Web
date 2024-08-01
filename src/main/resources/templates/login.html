@@ -1,47 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="content/login.css">
+
 </head>
 <body>
-<form method="post" action="/sign-in" style="padding-bottom: 50px">
-    <input type="text" name="username">
-    <input type="text" name="password">
-    <input type="submit" value="Log in">
-</form>
-<button onclick="authVk()" style="background: blue; color: aliceblue;" >Войти ВК</button>
+<div style="font-family: 'Brush Script MT', cursive;">
+    <h1>Sport Dnevnik</h1>
+</div>
+<div class="main">
+
+    <div>
+        <form id="form">
+            <div class="imgcontainer">
+                <!--                <img src="img_avatar2.png" alt="Avatar" class="avatar">-->
+            </div>
+
+            <div class="container">
+                <div id="error" style="background: #ff3b2e; width: auto; font-size: 18px; text-align: center; padding: 10px;border-radius: 10px; color: white; margin-bottom: 20px; display: none" >Login or password uncorrect</div>
+                <label for="uname"><b>Username</b></label>
+                <input type="text" placeholder="Enter Username" name="username" id="uname" required>
+
+                <label for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+
+                <button type="submit" style="border-radius: 10px;font-weight: bold; font-size: 20px">Login</button>
+                <label>
+                    <!--                    <input type="checkbox" checked="checked" name="remember"> Remember me-->
+                </label>
+                <div class="login_with">
+                    <span style="width: 100%; display: block; text-align: center">Login with</span>
+                    <div style="display: flex; justify-content: center; margin: 30px" onclick="authVk()" class="logo">
+                        <img src="content/logo/VK_Logo.svg" width="60px">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" class="cancelbtn" id="cancel">Cancel</button>
+                <span class="psw">Forgot <a href="#">password?</a></span>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>
-<script>
-    let data  = [[${key_vk}]]
-    console.log(data);
+<script src="content/login.js"></script>
 
-    function authVk() {
-        const uuid = '63248726347156725367128342341298731923';
-        const appId = 51955334;
-        const redirectUri = 'http://localhost/vk.auth';
-        const redirect_state = 'hello';
 
-        const query = `uuid=${uuid}&app_id=${appId}&response_type=silent_token&redirect_uri=${redirectUri}&redirect_state=${redirect_state}`;
-        console.log("Hello")
-        location.assign(`https://id.vk.com/auth?${query}`);
-    }
 
-    function logout() {
-        let currentUrl = window.location.href;
-        fetch('/logout1', {
-                method: 'GET',
-                credentials: 'same-origin'
-            }
-        )
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = currentUrl;
-                } else {
-                    console.error('logout  failed')
-                }
-            })
-    }
-
-</script>
