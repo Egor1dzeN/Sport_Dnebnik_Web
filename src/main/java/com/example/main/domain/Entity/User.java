@@ -1,6 +1,7 @@
 package com.example.main.domain.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,6 +22,7 @@ public class User implements UserDetails {
     Long id;
     @Column(unique = true)
     private String username;
+    @NotNull
     private String password;
     private String name;
     private String surname;
@@ -30,6 +32,7 @@ public class User implements UserDetails {
     private String aboutMe;
     private boolean isVerifyAccount;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Role role;
 
     @Override
@@ -42,6 +45,20 @@ public class User implements UserDetails {
         this.name = name;
         this.surname = surname;
         this.vkId = vkId;
+    }
+
+    public User(String username, String password, Role role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+    public User(String username){
+        this.username = username;
     }
 
     @Override

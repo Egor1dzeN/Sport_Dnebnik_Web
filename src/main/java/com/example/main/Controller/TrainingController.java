@@ -22,7 +22,8 @@ public class TrainingController {
     @PostMapping("/v1/training/v1/create")
     @ResponseBody
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201",description = "TEST")
+            @ApiResponse(responseCode = "201",description = "Successfully created new training"),
+            @ApiResponse(responseCode = "404", description = "User not found")
     })
     @Operation(description = "Method for create training")
     public ResponseEntity<Void> method2(@RequestBody Training training){ //ToDo: Principal principal

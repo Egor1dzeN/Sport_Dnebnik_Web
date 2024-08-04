@@ -29,6 +29,20 @@ public class Training {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Training() {
+    }
+
+    public Training(String typeTrainingStr, double distance, LocalDateTime startTime, LocalTime duration, String comment, int heartRate) {
+        setTypeTrainingStr(typeTrainingStr);
+        this.typeTrainingStr = typeTrainingStr;
+        this.distance = distance;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.comment = comment;
+        this.heartRate = heartRate;
+
+    }
+
     public void setTypeTrainingStr(String typeTrainingStr){
         this.typeTrainingStr = typeTrainingStr;
         TypeTraining[] arrayTypeTraining = TypeTraining.values();

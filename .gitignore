@@ -35,4 +35,6 @@ src/main/resources/database.properties
 src/main/resources/jwt.properties
 src/main/resources/vk.properties
 src/main/resources/mail.properties
+src/main/resources/admin.properties
+
 src/main/java/com/example/main/domain/JavaMailSender.java
