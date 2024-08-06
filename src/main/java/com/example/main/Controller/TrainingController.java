@@ -26,9 +26,9 @@ public class TrainingController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @Operation(description = "Method for create training")
-    public ResponseEntity<Void> method2(@RequestBody Training training){ //ToDo: Principal principal
-        trainingService.saveTraining(training, "e");
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<TrainingWithUsername> method2(@RequestBody Training training){ //ToDo: Principal principal
+        trainingService.saveTraining(training, "admin11");
+        return new ResponseEntity<>(new TrainingWithUsername(training), HttpStatus.CREATED);
     }
 
     @GetMapping("/v1/training/v1/get_all")

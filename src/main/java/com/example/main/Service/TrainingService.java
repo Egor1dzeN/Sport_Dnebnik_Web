@@ -27,8 +27,10 @@ public class TrainingService {
     }
 
     public List<TrainingWithUsername> getAllTraining() {
+        List<TrainingWithUsername> trainingList = trainingRepository.findAllTraining();
+
         //        System.out.println(list);
-        return trainingRepository.findAllTraining();
+        return trainingList;
     }
     public List<TrainingWithUsername> findTrainingByUserId(Long userId){
         //        System.out.println(list);
