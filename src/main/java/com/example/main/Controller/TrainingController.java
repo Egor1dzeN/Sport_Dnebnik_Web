@@ -7,31 +7,39 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 @Data
 public class TrainingController {
+    @Value(value = "${admin.username}")
+    private String adminUsername;
+
     private final TrainingService trainingService;
 
     @PostMapping("/v1/training/v1/create")
     @ResponseBody
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201",description = "Successfully created new training"),
+            @ApiResponse(responseCode = "201", description = "Successfully created new training"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @Operation(description = "Method for create training")
-    public ResponseEntity<TrainingWithUsername> method2(@RequestBody Training training){ //ToDo: Principal principal
-        trainingService.saveTraining(training, "admin11");
+    public ResponseEntity<TrainingWithUsername> method2(@RequestBody Training training, Principal principal) { //ToDo: Principal principal
+        if (principal == null)
+            trainingService.saveTraining(training, adminUsername);
+        else
+            trainingService.saveTraining(training, principal.getName());
         return new ResponseEntity<>(new TrainingWithUsername(training), HttpStatus.CREATED);
     }
 
-    @GetMapping("/v1/training/v1/get_all")
+    @GetMapping("/v1/training/v1/find_all")
     @ResponseBody
     public ResponseEntity<List<TrainingWithUsername>> getAllTrainings() {
         return new ResponseEntity<>(trainingService.getAllTraining(), HttpStatus.OK);

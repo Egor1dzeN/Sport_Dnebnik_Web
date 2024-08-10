@@ -43,27 +43,31 @@ public class BearerTokenAuthFilter extends OncePerRequestFilter {
 
         // Обрезаем префикс и получаем имя пользователя из токена
         var jwt = authHeader.substring(BEARER_PREFIX.length());
-        var username = jwtService.extractUsername(jwt);
+        try {
+            var username = jwtService.extractUsername(jwt);
 
-        if (!StringUtils.isEmpty(authHeader) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userService
-                    .userDetailsService()
-                    .loadUserByUsername(username);
+            if (!StringUtils.isEmpty(authHeader) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userService
+                        .userDetailsService()
+                        .loadUserByUsername(username);
 
-            // Если токен валиден, то аутентифицируем пользователя
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                SecurityContext context = SecurityContextHolder.createEmptyContext();
+                // Если токен валиден, то аутентифицируем пользователя
+                if (jwtService.isTokenValid(jwt, userDetails)) {
+                    SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
 
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                context.setAuthentication(authToken);
-                SecurityContextHolder.setContext(context);
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    context.setAuthentication(authToken);
+                    SecurityContextHolder.setContext(context);
+                }
             }
+        } catch (Exception e){
+            logger.error(e.getMessage());
         }
         filterChain.doFilter(request, response);
     }

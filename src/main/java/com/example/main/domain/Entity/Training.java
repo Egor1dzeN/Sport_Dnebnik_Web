@@ -1,12 +1,11 @@
 package com.example.main.domain.Entity;
 
 import com.example.main.domain.enums.TypeTraining;
-import com.example.main.domain.enums.UnitOfMeasurement;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Locale;
@@ -39,7 +38,7 @@ public class Training {
 
     public Training() {
     }
-
+    @PostConstruct
     public void setPace() {
         this.unitOfMeas = typeTraining.getUnitOfMeas().toString();
         switch (typeTraining.getUnitOfMeas()) {
@@ -73,7 +72,6 @@ public class Training {
         this.duration = duration;
         this.comment = comment;
         this.avgHeartRate = avgHeartRate;
-        setPace();
     }
 
     public Training(String typeTrainingStr, double distance, LocalDateTime startTime, LocalTime duration, String comment, int avgHeartRate) {
@@ -84,14 +82,20 @@ public class Training {
         this.duration = duration;
         this.comment = comment;
         this.avgHeartRate = avgHeartRate;
-        setPace();
     }
 
     public Training(TypeTraining typeTraining, double distance, LocalTime duration) {
         this.typeTraining = typeTraining;
         this.distance = distance;
         this.duration = duration;
-        setPace();
+    }
+    //For create basic trainings
+    public Training(TypeTraining typeTraining, double distance, LocalTime duration, LocalDateTime startTime) {
+        this.typeTraining = typeTraining;
+        this.distance = distance;
+        this.duration = duration;
+        this.startTime = startTime;
+//        setPace();
     }
 
     public void setTypeTrainingStr(String typeTrainingStr) {

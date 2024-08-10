@@ -29,7 +29,7 @@ public class TrainingService {
     public List<TrainingWithUsername> getAllTraining() {
         List<TrainingWithUsername> trainingList = trainingRepository.findAllTraining();
 
-        //        System.out.println(list);
+                System.out.println(trainingList);
         return trainingList;
     }
     public List<TrainingWithUsername> findTrainingByUserId(Long userId){

@@ -10,6 +10,7 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Locale;
 import java.util.Optional;
 
 @Data
@@ -40,6 +41,7 @@ public class TrainingWithUsername {
         this.duration = duration;
         this.comment = comment;
         this.avgHeartRate = avgHeartRate;
+
     }
     public TrainingWithUsername(Training training){
         this.username = Optional.of(training.getUser().getUsername()).orElse("user_uknown");
@@ -52,5 +54,32 @@ public class TrainingWithUsername {
         training.setPace();
         this.pace = training.getPace();
         this.unitOfMeas = training.getUnitOfMeas();
+    }
+//    @PostConstruct
+    public void setPace() {
+        this.unitOfMeas = typeTraining.getUnitOfMeas().toString();
+        switch (typeTraining.getUnitOfMeas()) {
+            case Km_H -> {
+                double hour = duration.getHour() + duration.getMinute() / 60.0
+                        + duration.getSecond() / 3600.0;
+                double pace = distance / hour;
+                this.pace = String.format(Locale.US, "%.1f", pace);
+            }
+            case Min_Km -> {
+                double minute = duration.getHour() * 60 + duration.getMinute()
+                        + duration.getSecond() / 60.0;
+                double pace = minute / distance;
+                this.pace = String.format(Locale.US, "%.2f", pace);
+            }
+            case Min_100m -> {
+                double minute = duration.getHour() * 60 + duration.getMinute()
+                        + duration.getSecond() / 60.0;
+                double pace = minute / (distance * 100);
+                this.pace = String.format(Locale.US, "%.2f", pace);
+            }
+            default -> this.pace = "0.0";
+        }
+
+
     }
 }

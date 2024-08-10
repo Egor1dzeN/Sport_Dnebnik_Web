@@ -2,9 +2,11 @@ package com.example.main;
 
 
 import com.example.main.Repository.UserRepository;
+import com.example.main.Service.TrainingService;
 import com.example.main.domain.Entity.Role;
+import com.example.main.domain.Entity.Training;
 import com.example.main.domain.Entity.User;
-import jakarta.persistence.Column;
+import com.example.main.domain.enums.TypeTraining;
 import lombok.Data;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +15,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Component
 @Data
 public class BasicSettings implements CommandLineRunner {
@@ -20,16 +25,44 @@ public class BasicSettings implements CommandLineRunner {
     private String adminUsername;
     @Value(value = "${admin.password}")
     private String adminPassword;
+    @Value(value = "${user.username}")
+    private String userUsername;
+    @Value(value = "${user.password}")
+    private String userPassword;
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
+    private final TrainingService trainingService;
     private final Logger logger = LogManager.getLogger(BasicSettings.class);
 
     @Override
     public void run(String... args)  {
-        logger.info("Created admin user");
+        createSuperAdmin();
+        createSuperUser();
+        createBasicTrainings();
+    }
+    public void createSuperAdmin(){
+        logger.info("Created super admin");
         if (!userRepository.existsByUsername(adminUsername)) {
             userRepository.save(new User(adminUsername, passwordEncoder.encode(adminPassword), Role.ROLE_ADMIN));
         }
     }
+    public void createSuperUser(){
+        logger.info("Created super user");
+        if (!userRepository.existsByUsername(userUsername)) {
+            userRepository.save(new User(userUsername, passwordEncoder.encode(userPassword), Role.ROLE_USER));
+        }
+    }
+    public void createBasicTrainings(){
+        logger.info("Created basic trainings");
+        LocalTime lt1 = LocalTime.of(1, 0);
+        LocalDateTime ldt1 = LocalDateTime.of(2024, 5, 5, 10, 0);
+        Training training1 = new Training(TypeTraining.RUN, 10, lt1, ldt1);
+        trainingService.saveTraining(training1, adminUsername);
+        LocalTime lt2 = LocalTime.of(2, 0);
+        LocalDateTime ldt2 = LocalDateTime.of(2024, 5, 5, 10, 0);
+        Training training2 = new Training(TypeTraining.CYCLE, 50, lt1, ldt1);
+        trainingService.saveTraining(training2, userUsername);
+    }
+
 }
