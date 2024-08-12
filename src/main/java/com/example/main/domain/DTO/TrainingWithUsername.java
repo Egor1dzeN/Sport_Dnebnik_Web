@@ -2,11 +2,9 @@ package com.example.main.domain.DTO;
 
 import com.example.main.domain.Entity.Training;
 import com.example.main.domain.enums.TypeTraining;
-import com.example.main.domain.enums.UnitOfMeasurement;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -55,7 +53,7 @@ public class TrainingWithUsername {
         this.pace = training.getPace();
         this.unitOfMeas = training.getUnitOfMeas();
     }
-//    @PostConstruct
+    @PostConstruct
     public void setPace() {
         this.unitOfMeas = typeTraining.getUnitOfMeas().toString();
         switch (typeTraining.getUnitOfMeas()) {

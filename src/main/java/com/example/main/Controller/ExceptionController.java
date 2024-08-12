@@ -4,7 +4,6 @@ import com.example.main.MyException.InvalidDataException;
 import com.example.main.MyException.UserAlreadyExistException;
 import com.example.main.MyException.UserEmailException;
 import com.example.main.MyException.UserNotFoundException;
-import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

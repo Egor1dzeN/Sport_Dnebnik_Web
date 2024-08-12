@@ -20,9 +20,11 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping("/v1/training/v1/getAllComment")
-    public ResponseEntity<?> getAllCommentByTrainingId(@RequestParam(name = "training_id") Long id) {
-        var listComment = commentService.getAllCommentByTrainingId(id);
+    @GetMapping("/v1/training/v1/comments")
+    public ResponseEntity<?> getCommentsByTrainingId(@RequestParam(name = "training_id") Long id,
+                                                       @RequestParam(name = "limit")int limit,
+                                                       @RequestParam(name = "offset")int offset) {
+        var listComment = commentService.getAllCommentByTrainingIdAndLimitAndOffset(id, limit, offset);
         List<HashMap<String, String>> list = new ArrayList<>();
         for (Comment comment : listComment) {
             var map = new HashMap<String, String>();

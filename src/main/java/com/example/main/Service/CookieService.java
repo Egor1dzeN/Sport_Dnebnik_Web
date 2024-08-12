@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CookieService {
-    private Logger logger = LogManager.getLogger(CookieService.class);
-    public static String TOKEN_AUTH_STR = "Session_id";
+    private final Logger logger = LogManager.getLogger(CookieService.class);
+    public static final String TOKEN_AUTH_STR = "Session_id";
     public void addCookie(HttpServletResponse response, JwtTokenResponse tokenResponse) {
         ResponseCookie cookie = ResponseCookie.from(TOKEN_AUTH_STR, tokenResponse.getToken())
                 .httpOnly(true)

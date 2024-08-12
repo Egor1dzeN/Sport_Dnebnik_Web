@@ -24,7 +24,7 @@ public class TrainingController {
 
     private final TrainingService trainingService;
 
-    @PostMapping("/v1/training/v1/create")
+    @PostMapping("/v1/training")
     @ResponseBody
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Successfully created new training"),
@@ -39,7 +39,7 @@ public class TrainingController {
         return new ResponseEntity<>(new TrainingWithUsername(training), HttpStatus.CREATED);
     }
 
-    @GetMapping("/v1/training/v1/find_all")
+    @GetMapping("/v1/trainings")
     @ResponseBody
     public ResponseEntity<List<TrainingWithUsername>> getAllTrainings() {
         return new ResponseEntity<>(trainingService.getAllTraining(), HttpStatus.OK);

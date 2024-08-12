@@ -1,7 +1,5 @@
 package com.example.main.Service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -21,7 +19,7 @@ public class JwtService {
     private String jwtSigningKey;
 
     public String extractUsername(String jws) throws Exception {
-        String username = "";
+        String username;
         try {
             username = Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(jws).getPayload().getSubject();
         } catch (Exception e) {
@@ -49,28 +47,22 @@ public class JwtService {
                 .compact();
     }
 
-    private boolean isTokenExpired(String jws) {
-        Date expiration = Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(jws).getPayload().getExpiration();
+//    private boolean isTokenExpired(String jws) {
+//        Date expiration = Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(jws).getPayload().getExpiration();
 //        System.out.println("Expired time - "+ expiration+" now - "+new Date());
-        return new Date().before(expiration);
-    }
+//        return new Date().before(expiration);
+//    }
 
     public boolean isTokenValid(String jws, UserDetails userDetails) throws Exception {
-        String username = "";
+        String username;
         username = extractUsername(jws);
-        boolean auth = username.equals(userDetails.getUsername());
-        boolean auth2 = isTokenExpired(jws);
-
-//        System.out.println("Valid username - "+auth);
-//        System.out.println("Valid expired - "+auth2);
-        return auth;
+        return username.equals(userDetails.getUsername());
     }
 
     public SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
-        SecretKey key = Keys.hmacShaKeyFor(keyBytes);
-//            System.out.println(key);
-        return key;
+        //            System.out.println(key);
+        return Keys.hmacShaKeyFor(keyBytes);
 
     }
 }

@@ -1,21 +1,13 @@
 package com.example.main.domain.Entity;
 
 import com.example.main.domain.enums.TypeTraining;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TrainingTest {
-    private static Training training1;
 
-    @BeforeAll
-    static void training1Init() {
-
-    }
 
     @Test
     void setPaceTest_Km_H1() {

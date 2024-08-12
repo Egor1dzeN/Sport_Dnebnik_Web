@@ -19,7 +19,7 @@ public class CommentService {
     private final EntityManager entityManager;
     private final UserRepository userRepository;
 
-    public List<Comment> getAllCommentByTrainingId(Long trainingId) {
+    public List<Comment> getAllCommentByTrainingIdAndLimitAndOffset(Long trainingId, int limit, int offset) {
         return commentRepository.findAllByTrainingId(trainingId);
     }
 

@@ -44,8 +44,7 @@ public class VkAuthService {
             VkUserResponse vkUserResponse = getUserFromVk(answerVKAccessToken.getAccessToken(), answerVKAccessToken.getUserId());
 
             if (vkUserRepository.existsByUserVkId(vkUserResponse.getId())) {
-                VkUser vkUser = vkUserRepository.findAllByUserVkId(vkUserResponse.getId());
-                return vkUser;
+                return vkUserRepository.findAllByUserVkId(vkUserResponse.getId());
             } else {
                 VkUser vkUser = new VkUser(vkUserResponse.getFirst_name(), vkUserResponse.getLast_name(), vkUserResponse.getId());
                 String secretKey = generateRandomStringService.generateRandomString();

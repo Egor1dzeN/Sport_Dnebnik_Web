@@ -7,7 +7,6 @@ import com.example.main.domain.DTO.JwtTokenResponse;
 import com.example.main.domain.DTO.SignInRequest;
 import com.example.main.domain.DTO.SignUpRequest;
 import com.example.main.Repository.UserRepository;
-import jakarta.mail.MessagingException;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +31,7 @@ public class AuthService {
     private final EmailService mailService;
     private static final Logger logger = LogManager.getLogger(AuthService.class);
 
-    public JwtTokenResponse signUp(SignUpRequest request) throws MessagingException {
+    public JwtTokenResponse signUp(SignUpRequest request){
         if (!mailService.isValidEmail(request.getEmail()))
             throw new InvalidDataException("Unsuitable email");
         var user = new User();

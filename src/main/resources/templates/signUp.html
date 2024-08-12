@@ -24,8 +24,8 @@
                 <input type="text" placeholder="Enter Username" name="username" id="uname" required>
                 <div style="display: flex; justify-content: left">
                     <div style="width: 50%; margin-right: 30px">
-                        <label><b>Имя</b></label>
-                        <input type="text" placeholder="Enter name" name="name">
+                        <label for="name"><b>Имя</b></label>
+                        <input id="name" type="text" placeholder="Enter name" name="name">
                     </div>
                     <div style="width: 50%">
                         <label><b>Фамилия</b></label>
@@ -36,9 +36,9 @@
                 <input type="text" placeholder="Enter email" name="email" required>
 
 
-                <label for="password"><b>Пароль</b></label>
+                <label for="psw1"><b>Пароль</b></label>
                 <input type="password" id="psw1" placeholder="Enter Password" name="password1" required>
-                <label for="password"><b>Пароль</b> <span style="font-size: 15px">еще раз</span></label>
+                <label for="psw2"><b>Пароль</b> <span style="font-size: 15px">еще раз</span></label>
                 <input type="password" id="psw2" placeholder="Enter Password again" name="password2" required>
                 <button type="submit" style="border-radius: 10px;font-weight: bold; font-size: 20px">Sign up</button>
             </div>

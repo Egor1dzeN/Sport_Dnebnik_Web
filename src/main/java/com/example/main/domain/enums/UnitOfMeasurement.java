@@ -1,6 +1,5 @@
 package com.example.main.domain.enums;
 
-import lombok.Getter;
 
 
 public enum UnitOfMeasurement {
