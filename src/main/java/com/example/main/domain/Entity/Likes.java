@@ -1,14 +1,30 @@
 package com.example.main.domain.Entity;
 
 import jakarta.persistence.*;
-// ToDo: add likes for training
+import lombok.Data;
+
 @Entity
+@Data
 public class Likes {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "training_id")
+    @OneToOne
+    @JoinColumn(name = "training_id", nullable = false)
     private Training training;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
 //    private Arr
+
+    public Likes(Training training, User user) {
+        this.user = user;
+        this.training = training;
+    }
+
+    public Likes() {
+    }
 }
