@@ -1,5 +1,6 @@
 package com.example.main.Controller;
 
+import com.example.main.Service.UserService;
 import com.example.main.domain.Entity.Comment;
 import com.example.main.Service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,12 +21,14 @@ import java.util.List;
 @ResponseBody
 public class CommentController {
     private final CommentService commentService;
+    private final UserService userService;
 
     @GetMapping("/v1/training/v1/comments")
     public ResponseEntity<?> getCommentsByTrainingId(@RequestParam(name = "training_id") Long id,
-                                                       @RequestParam(name = "limit")int limit,
-                                                       @RequestParam(name = "offset")int offset) {
+                                                     @RequestParam(name = "limit") int limit,
+                                                     @RequestParam(name = "offset") int offset) {
         var listComment = commentService.getAllCommentByTrainingIdAndLimitAndOffset(id, limit, offset);
+        System.out.println(listComment);
         List<HashMap<String, String>> list = new ArrayList<>();
         for (Comment comment : listComment) {
             var map = new HashMap<String, String>();
@@ -37,14 +41,19 @@ public class CommentController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @PostMapping("/v1/training/v1/addComment")
-    public ResponseEntity<HashMap<?,?>> addComment(@RequestParam(name = "training_id") Long trainingId, @RequestParam(name = "user_id") Long userId, @RequestBody String text) {
-        System.out.println(text);
-        var user = commentService.addComment(userId, trainingId, text);
+    @PostMapping("/v1/training/v1/comment")
+    public ResponseEntity<HashMap<?, ?>> addComment(@RequestParam(name = "training_id") Long trainingId,
+                                                    @RequestParam(name = "user_id") Long userId,
+                                                    @RequestParam(name = "text") String text) {
+
+        Comment comment = commentService.save(trainingId, userId, text);
+
         var map = new HashMap<String, String>();
-        map.put("username", user.getUsername());
+        map.put("username", comment.getUser().getUsername());
+        map.put("training_id", comment.getTraining().getId()+"");
+        map.put("text", comment.getText());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
         map.put("date", LocalDateTime.now().format(formatter));
-        return new ResponseEntity<>(map, HttpStatus.OK);
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
 }

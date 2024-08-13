@@ -18,11 +18,11 @@ public class TrainingService {
     private final UserRepository userRepository;
     private final TrainingRepository trainingRepository;
 
-    public void saveTraining(Training training, String username){
+    public Training saveTraining(Training training, String username){
         Optional<User> optionalUser = Optional.of(userRepository.findByUsername(username));
         User user = optionalUser.orElseThrow(() -> new UserNotFoundException("User wasn't found, username - " + username));
         training.setUser(user);
-        trainingRepository.save(training);
+        return trainingRepository.save(training);
 //        System.out.println("Training is saved " + training);
     }
 
@@ -35,5 +35,8 @@ public class TrainingService {
     public List<TrainingWithUsername> findTrainingByUserId(Long userId){
         //        System.out.println(list);
         return trainingRepository.findAllByUserId(userId);
+    }
+    public Optional<Training> findById(Long id){
+        return trainingRepository.findById(id);
     }
 }

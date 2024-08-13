@@ -1,6 +1,7 @@
 package com.example.main.domain.Entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -9,15 +10,15 @@ import java.time.LocalDateTime;
 @Data
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "training_id")
+    @JoinColumn(name = "training_id", nullable = false)
     private Training training;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
     private String text;
     private LocalDateTime localDateTime;
