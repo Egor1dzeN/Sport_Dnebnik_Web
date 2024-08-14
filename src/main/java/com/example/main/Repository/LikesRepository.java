@@ -13,4 +13,7 @@ public interface LikesRepository extends JpaRepository<Likes, LikesId> {
     boolean existsAllByTrainingAndUser(Training training, User user);
     void deleteByTrainingAndUser(Training training, User user);
     Optional<Likes> findByTrainingAndUser(Training training, User user);
+
+    boolean existsByUserIdAndTrainingId(Long userId, Long trainingId);
+    int countAllByTrainingId(Long trainingId);
 }

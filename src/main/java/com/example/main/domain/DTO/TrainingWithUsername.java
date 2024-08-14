@@ -8,11 +8,13 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
 @Data
 public class TrainingWithUsername {
+    private Long trainingId;
     private String username;
     private TypeTraining typeTraining;
     private double distance;
@@ -24,6 +26,9 @@ public class TrainingWithUsername {
     private String pace;
     @JsonProperty(value = "unit_of_meas")
     private String unitOfMeas;
+    private int countLike;
+    private boolean isLiked = false;
+    private List<CommentDTO> commentList;
     public TrainingWithUsername(String username,
                                 TypeTraining typeTraining,
                                 double distance,
@@ -52,6 +57,7 @@ public class TrainingWithUsername {
         training.setPace();
         this.pace = training.getPace();
         this.unitOfMeas = training.getUnitOfMeas();
+        this.trainingId = training.getId();
     }
     @PostConstruct
     public void setPace() {

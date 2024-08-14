@@ -1,4 +1,4 @@
-package com.example.main.Controller;
+package com.example.main.Controller.Training;
 
 import com.example.main.Service.TrainingService;
 import com.example.main.domain.DTO.TrainingWithUsername;
@@ -6,18 +6,21 @@ import com.example.main.domain.Entity.Training;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
 import java.util.List;
 
 @Controller
 @Data
+@Validated
 public class TrainingController {
     @Value(value = "${admin.username}")
     private String adminUsername;
@@ -31,7 +34,7 @@ public class TrainingController {
             @ApiResponse(responseCode = "404", description = "User not found")
     })
     @Operation(description = "Method for create training")
-    public ResponseEntity<TrainingWithUsername> method2(@RequestBody Training training, Principal principal) { //ToDo: Principal principal
+    public ResponseEntity<TrainingWithUsername> createTraining(@RequestBody Training training, Principal principal) { //ToDo: Principal principal
         if (principal == null)
             trainingService.saveTraining(training, adminUsername);
         else
@@ -41,8 +44,11 @@ public class TrainingController {
 
     @GetMapping("/v1/trainings")
     @ResponseBody
-    public ResponseEntity<List<TrainingWithUsername>> getAllTrainings() {
-        return new ResponseEntity<>(trainingService.getAllTraining(), HttpStatus.OK);
+    public ResponseEntity<List<TrainingWithUsername>> getTrainings(
+            @RequestParam(defaultValue = "10")@Max(value = 100, message = "Limit should be less than 100")@Min(1) Integer limit,
+            @RequestParam(defaultValue = "0") int offset,
+            @RequestParam int userId) {
+        return new ResponseEntity<>(trainingService.getTrainings(limit, offset, userId), HttpStatus.OK);
     }
 
     @GetMapping("/v1/training/test")

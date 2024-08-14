@@ -4,6 +4,7 @@ import com.example.main.MyException.InvalidDataException;
 import com.example.main.MyException.UserAlreadyExistException;
 import com.example.main.MyException.UserEmailException;
 import com.example.main.MyException.UserNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -42,6 +43,13 @@ public class ExceptionController {
     public ResponseEntity<?> handleInvalidDataException(RuntimeException invalidDataException){
         var map = new HashMap<String, String>();
         map.put("error_msg", invalidDataException.getMessage());
+        return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
+    }
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handleInvalidDataException(ConstraintViolationException constraintViolationException){
+        var map = new HashMap<String, String>();
+        map.put("error_msg", constraintViolationException.getMessage());
         return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
     }
 }

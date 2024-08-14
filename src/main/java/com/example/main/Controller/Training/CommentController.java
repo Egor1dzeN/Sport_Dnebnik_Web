@@ -1,4 +1,4 @@
-package com.example.main.Controller;
+package com.example.main.Controller.Training;
 
 import com.example.main.Service.UserService;
 import com.example.main.domain.Entity.Comment;
@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,14 +20,13 @@ import java.util.List;
 @ResponseBody
 public class CommentController {
     private final CommentService commentService;
-    private final UserService userService;
 
     @GetMapping("/v1/training/v1/comments")
     public ResponseEntity<?> getCommentsByTrainingId(@RequestParam(name = "training_id") Long id,
-                                                     @RequestParam(name = "limit") int limit,
-                                                     @RequestParam(name = "offset") int offset) {
+                                                     @RequestParam(name = "limit", defaultValue = "10") int limit,
+                                                     @RequestParam(name = "offset", defaultValue = "0") int offset) {
         var listComment = commentService.getAllCommentByTrainingIdAndLimitAndOffset(id, limit, offset);
-        System.out.println(listComment);
+//        System.out.println(listComment);
         List<HashMap<String, String>> list = new ArrayList<>();
         for (Comment comment : listComment) {
             var map = new HashMap<String, String>();
