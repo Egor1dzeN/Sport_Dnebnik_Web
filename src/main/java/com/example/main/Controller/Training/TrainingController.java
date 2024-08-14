@@ -68,4 +68,12 @@ public class TrainingController {
     public ResponseEntity<List<TrainingWithUsername>> findTrainingByUser(@RequestParam(name = "user_id") Long userId) {
         return new ResponseEntity<>(trainingService.findTrainingByUserId(userId), HttpStatus.OK);
     }
+
+    @GetMapping("/v1/training/v1/following")
+    @ResponseBody
+    public ResponseEntity<List<TrainingWithUsername>> findTrainingFollowingUsers(@RequestParam(name = "user_id")Long userId,
+                                                                                 @RequestParam(defaultValue = "0") int offset,
+                                                                                 @RequestParam(defaultValue = "10") @Max(100) @Min(1) int limit){
+        return new ResponseEntity<>(trainingService.getTrainingFollowingUsers(limit,offset, userId), HttpStatus.OK);
+    }
 }

@@ -14,9 +14,11 @@ import java.util.Optional;
 public interface TrainingRepository extends JpaRepository<Training, Long> {
     @Query(value = "SELECT new com.example.main.domain.DTO.TrainingWithUsername(t) FROM Training as t ")
     List<TrainingWithUsername> findTrainings(Pageable pageable);
-    @Query ("SELECT new com.example.main.domain.DTO.TrainingWithUsername(t.user.username, t.typeTraining, t.distance, t.startTime, t.duration, t.comment, t.avgHeartRate) FROM Training as t where t.user.id = :user_id")
+    @Query ("SELECT new com.example.main.domain.DTO.TrainingWithUsername(t) FROM Training as t where t.user.id = :user_id")
     List<TrainingWithUsername> findAllByUserId(@Param("user_id") Long userId);
 
+    @Query("SELECT new com.example.main.domain.DTO.TrainingWithUsername(t) FROM Training as t where t.user.id IN :list_users_id")
+    List<TrainingWithUsername> findAllByUserIdIn(@Param("list_users_id") List<Long> listUsersId, Pageable pageable);
     @Nonnull
     Optional<Training> findById(@Nonnull Long id);
 }
