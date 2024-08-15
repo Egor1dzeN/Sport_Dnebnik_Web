@@ -6,6 +6,8 @@ import com.example.main.Repository.VkUserRepository;
 import com.example.main.Service.AuthService;
 import com.example.main.Service.CookieService;
 import com.example.main.Service.JwtService;
+import com.example.main.domain.Entity.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,6 +37,10 @@ public class MainController {
         model.addAttribute("key_vk", "1234561");
         return "index";
     }
+    @GetMapping("/v1/avatar")
+    public String nethod(){
+        return "avatar";
+    }
 
 
 
@@ -48,5 +54,6 @@ public class MainController {
     public String addUsername() {
         return "addUsername";
     }
+
 }
 

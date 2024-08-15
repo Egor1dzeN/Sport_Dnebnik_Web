@@ -35,6 +35,10 @@ public class User implements UserDetails {
     @NotNull
     private Role role;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] avatar;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
