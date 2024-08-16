@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 import java.util.List;
 
@@ -36,21 +37,26 @@ public class TrainingController {
     @Operation(description = "Method for create training")
     public ResponseEntity<TrainingWithUsername> createTraining(@RequestBody Training training, Principal principal) { //ToDo: Principal principal
         if (principal == null)
-            trainingService.saveTraining(training, adminUsername);
+            trainingService.save(adminUsername, training);
         else
-            trainingService.saveTraining(training, principal.getName());
+            trainingService.save(principal.getName(), training);
         return new ResponseEntity<>(new TrainingWithUsername(training), HttpStatus.CREATED);
     }
 
     @GetMapping("/v1/trainings")
     @ResponseBody
     public ResponseEntity<List<TrainingWithUsername>> getTrainings(
-            @RequestParam(defaultValue = "10")@Max(value = 100, message = "Limit should be less than 100")@Min(1) Integer limit,
+            @RequestParam(defaultValue = "10") @Max(value = 100, message = "Limit should be less than 100") @Min(1) Integer limit,
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam int userId) {
         return new ResponseEntity<>(trainingService.getTrainings(limit, offset, userId), HttpStatus.OK);
     }
-
+    @DeleteMapping("/v1/training/delete/{id}")
+    public ResponseEntity<?> deleteTraining(@PathVariable("id") Long trainingId) {
+        System.out.println(trainingId);
+        trainingService.deleteTraining(trainingId);
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+    }
     @GetMapping("/v1/training/test")
     @ResponseBody
     public ResponseEntity<String> getAllTrainings1() {
@@ -71,9 +77,9 @@ public class TrainingController {
 
     @GetMapping("/v1/training/v1/following")
     @ResponseBody
-    public ResponseEntity<List<TrainingWithUsername>> findTrainingFollowingUsers(@RequestParam(name = "user_id")Long userId,
+    public ResponseEntity<List<TrainingWithUsername>> findTrainingFollowingUsers(@RequestParam(name = "user_id") Long userId,
                                                                                  @RequestParam(defaultValue = "0") int offset,
-                                                                                 @RequestParam(defaultValue = "10") @Max(100) @Min(1) int limit){
-        return new ResponseEntity<>(trainingService.getTrainingFollowingUsers(limit,offset, userId), HttpStatus.OK);
+                                                                                 @RequestParam(defaultValue = "10") @Max(100) @Min(1) int limit) {
+        return new ResponseEntity<>(trainingService.getTrainingFollowingUsers(limit, offset, userId), HttpStatus.OK);
     }
 }

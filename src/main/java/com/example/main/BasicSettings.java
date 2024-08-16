@@ -1,9 +1,12 @@
 package com.example.main;
 
 
+import com.example.main.Repository.TrainingRepository;
 import com.example.main.Repository.UserRepository;
 import com.example.main.Service.CommentService;
 import com.example.main.Service.TrainingService;
+import com.example.main.Service.UserService;
+import com.example.main.domain.Entity.Comment;
 import com.example.main.domain.Entity.Role;
 import com.example.main.domain.Entity.Training;
 import com.example.main.domain.Entity.User;
@@ -25,6 +28,8 @@ import java.util.List;
 @Component
 @Data
 public class BasicSettings implements CommandLineRunner {
+    private final UserService userService;
+    private final TrainingRepository trainingRepository;
     @Value(value = "${admin.username}")
     private String adminUsername;
     @Value(value = "${admin.password}")
@@ -41,51 +46,50 @@ public class BasicSettings implements CommandLineRunner {
 
     private final Logger logger = LogManager.getLogger(BasicSettings.class);
 
-    private final List<Long> usersIdList = new ArrayList<>();
-    private final List<Long> trainingIdList = new ArrayList<>();
+    private final List<User> usersIdList = new ArrayList<>();
+    private final List<Training> trainingIdList = new ArrayList<>();
+//    private final List<Training> trainingIdList = new ArrayList<>();
     @Override
     @Transactional
     public void run(String... args){
         createSuperAdmin();
         createSuperUser();
-        createBasicTrainings();
-        createCommentForBasicTraining();
+        createBasicTrainingsAndComments();
+//        createCommentForBasicTraining();
+        createComments();
     }
     public void createSuperAdmin(){
         logger.info("Created super admin");
         if (!userRepository.existsByUsername(adminUsername)) {
             User user = userRepository.save(new User(adminUsername, passwordEncoder.encode(adminPassword), Role.ROLE_ADMIN));
-            usersIdList.add(user.getId());
+            usersIdList.add(user);
         }
     }
     public void createSuperUser(){
         logger.info("Created super user");
         if (!userRepository.existsByUsername(userUsername)) {
             User user = userRepository.save(new User(userUsername, passwordEncoder.encode(userPassword), Role.ROLE_USER));
-            usersIdList.add(user.getId());
+            usersIdList.add(user);
         }
     }
-    public void createBasicTrainings(){
+    public void createBasicTrainingsAndComments(){
         logger.info("Created basic trainings");
         LocalTime lt1 = LocalTime.of(1, 0);
         LocalDateTime ldt1 = LocalDateTime.of(2024, 5, 5, 10, 0);
         Training training1 = new Training(TypeTraining.RUN, 10, lt1, ldt1);
-        Training training_1 = trainingService.saveTraining(training1, adminUsername);
-        trainingIdList.add(training_1.getId());
+        usersIdList.getFirst().addTraining(training1);
+        trainingService.save(usersIdList.get(0), training1);
 
         LocalTime lt2 = LocalTime.of(2, 0);
         LocalDateTime ldt2 = LocalDateTime.of(2024, 5, 5, 10, 0);
         Training training2 = new Training(TypeTraining.CYCLE, 50, lt2, ldt2);
-        Training training_2 = trainingService.saveTraining(training2, userUsername);
-        trainingIdList.add(training_2.getId());
+        trainingService.save(usersIdList.get(1), training2);
+
     }
-    public void createCommentForBasicTraining(){
-        logger.info("Created basic comments");
-        for(Long trainingId : trainingIdList){
-            for(Long userId : usersIdList){
-                commentService.save(trainingId, userId, "comment from user - "+userId+" :)");
-            }
-        }
+    public void createComments(){
+        List<Training> training = trainingRepository.findAll();
+        Comment comment2 = new Comment(training.getFirst(), usersIdList.get(1), "Comment 2");
+        commentService.save(comment2);
     }
 
 }

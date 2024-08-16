@@ -26,7 +26,7 @@ public class CommentController {
                                                      @RequestParam(name = "limit", defaultValue = "10") int limit,
                                                      @RequestParam(name = "offset", defaultValue = "0") int offset) {
         var listComment = commentService.getAllCommentByTrainingIdAndLimitAndOffset(id, limit, offset);
-//        System.out.println(listComment);
+
         List<HashMap<String, String>> list = new ArrayList<>();
         for (Comment comment : listComment) {
             var map = new HashMap<String, String>();

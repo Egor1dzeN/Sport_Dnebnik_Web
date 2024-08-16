@@ -10,6 +10,7 @@ import com.example.main.domain.Entity.Training;
 import com.example.main.domain.Entity.User;
 import jakarta.persistence.EntityManager;
 import lombok.Data;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,9 +26,11 @@ public class CommentService {
     private final TrainingRepository trainingRepository;
 
     public List<Comment> getAllCommentByTrainingIdAndLimitAndOffset(Long trainingId, int limit, int offset) {
-        return commentRepository.findByTrainingId(trainingId, limit, offset);
+        return commentRepository.findByTrainingId(trainingId, PageRequest.of(offset, limit));
     }
-
+    public Comment save(Comment comment){
+        return commentRepository.save(comment);
+    }
     public Comment save(Long trainingId, Long userId, String text) {
         return save(LocalDateTime.now(), trainingId, userId, text);
     }
@@ -36,7 +39,6 @@ public class CommentService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         Training training = trainingRepository.findById(trainingId).orElseThrow(() -> new NotFoundException("Training with ID: "+trainingId+" not found"));
         Comment comment = new Comment(training, user, text);
-        commentRepository.saveComment(createTime, trainingId, userId, text);
-        return comment;
+        return save(comment);
     }
 }

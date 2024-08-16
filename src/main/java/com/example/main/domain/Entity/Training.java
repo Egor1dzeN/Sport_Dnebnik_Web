@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Locale;
 
 @Entity
@@ -32,10 +33,15 @@ public class Training {
     @Transient
     private String unitOfMeas;
 
-    @ManyToOne()
+    @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentList; //ToDo: fix save comment !!
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
+    public void addComment(Comment comment){
+        commentList.add(comment);
+    }
     public Training() {
     }
     @PostConstruct

@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    @Query(value = "SELECT * FROM Comment as c where c.training_id=:training_id LIMIT :limit OFFSET :offset ", nativeQuery = true)
-    List<Comment> findByTrainingId(@Param("training_id") Long trainingId,@Param("limit") int limit,@Param("offset") int offset);
+    @Query(value = "SELECT * FROM Comment as c where c.training_id=:training_id", nativeQuery = true)
+    List<Comment> findByTrainingId(@Param("training_id") Long trainingId,Pageable pageable);
     @Query(value = "select new com.example.main.domain.DTO.CommentDTO(c) from Comment as c where c.training.id = :training_id")
     List<CommentDTO> findComment(@Param("training_id")long trainingId,  Pageable pageable);
 

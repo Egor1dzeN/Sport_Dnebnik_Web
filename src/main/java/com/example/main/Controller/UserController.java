@@ -27,7 +27,12 @@ public class UserController {
     public ResponseEntity<?> getUserById(@RequestParam(value = "user_id") Long id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
-
+    @DeleteMapping("/v1/user/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id")long id){
+        userService.delete(id);
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+    }
+    /*
     @PostMapping("/v1/user/v1/avatar/{id}")
     public ResponseEntity<?> setAvatar(@PathVariable("id") long id, @RequestParam("file")MultipartFile image) throws IOException {
         User user = userService.getUserById(id).get();
@@ -48,4 +53,5 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+     */
 }
