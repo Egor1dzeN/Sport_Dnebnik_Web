@@ -5,11 +5,12 @@ import com.example.main.Repository.LikesRepository;
 import com.example.main.domain.Entity.Training;
 import com.example.main.domain.Entity.User;
 import com.example.main.MyException.UserNotFoundException;
-import com.example.main.domain.DTO.TrainingWithUsername;
+import com.example.main.domain.DTO.TrainingDTO;
 import com.example.main.Repository.TrainingRepository;
 import com.example.main.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -44,9 +45,9 @@ public class TrainingService {
         }
     }
 
-    public List<TrainingWithUsername> getTrainings(int limit, int offset, int userId) {
+    public Page<TrainingDTO> getTrainings(int limit, int offset, int userId) {
         Pageable pageable = PageRequest.of(offset, limit);
-        List<TrainingWithUsername> trainingList = trainingRepository.findTrainings(pageable);
+        Page<TrainingDTO> trainingList = trainingRepository.findTrainings(pageable);
         userRepository.findById((long) userId).orElseThrow(() -> new UserNotFoundException(userId));
         for (var training : trainingList) {
             if (likesRepository.existsByUserIdAndTrainingId((long) userId, training.getTrainingId())) {
@@ -58,10 +59,10 @@ public class TrainingService {
         return trainingList;
     }
 
-    public List<TrainingWithUsername> getTrainingFollowingUsers(int limit, int offset, long userId) {
+    public Page<TrainingDTO> getTrainingFollowingUsers(int limit, int offset, long userId) {
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         List<Long> listFollowingUsersId = friendService.getIdFollowing(userId);
-        List<TrainingWithUsername> trainingList = trainingRepository.findAllByUserIdIn(listFollowingUsersId, PageRequest.of(offset, limit));
+        Page<TrainingDTO> trainingList = trainingRepository.findAllByUserIdIn(listFollowingUsersId, PageRequest.of(offset, limit));
         for (var training : trainingList) {
             if (likesRepository.existsByUserIdAndTrainingId(userId, training.getTrainingId())) {
                 training.setLiked(true);
@@ -72,9 +73,17 @@ public class TrainingService {
         return trainingList;
     }
 
-    public List<TrainingWithUsername> findTrainingByUserId(Long userId) {
-        //        System.out.println(list);
-        return trainingRepository.findAllByUserId(userId);
+    public Page<TrainingDTO> findTrainingByUserId(int limit, int offset, long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        Page<TrainingDTO> trainingList = trainingRepository.findAllByUserId(userId, PageRequest.of(offset, limit));
+        for (var training : trainingList) {
+            if (likesRepository.existsByUserIdAndTrainingId(userId, training.getTrainingId())) {
+                training.setLiked(true);
+            }
+            training.setCommentList(commentRepository.findComment(training.getTrainingId(), PageRequest.of(0, 10)));
+            training.setCountLike(likesRepository.countAllByTrainingId(training.getTrainingId()));
+        }
+        return trainingList;
     }
 
     public Optional<Training> findById(Long id) {

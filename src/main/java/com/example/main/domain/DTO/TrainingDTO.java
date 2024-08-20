@@ -13,11 +13,14 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Data
-public class TrainingWithUsername {
+public class TrainingDTO {
+    @JsonProperty(value = "training_id")
     private Long trainingId;
     private String username;
+    @JsonProperty(value = "type_training")
     private TypeTraining typeTraining;
     private double distance;
+    @JsonProperty(value = "start_time")
     private LocalDateTime startTime;
     private LocalTime duration;
     private String comment;
@@ -26,16 +29,19 @@ public class TrainingWithUsername {
     private String pace;
     @JsonProperty(value = "unit_of_meas")
     private String unitOfMeas;
+    @JsonProperty(value = "count_like")
     private int countLike;
     private boolean isLiked = false;
+    @JsonProperty(value = "comment_list")
     private List<CommentDTO> commentList;
-    public TrainingWithUsername(String username,
-                                TypeTraining typeTraining,
-                                double distance,
-                                LocalDateTime startTime,
-                                LocalTime duration,
-                                String comment,
-                                int avgHeartRate) {
+
+    public TrainingDTO(String username,
+                       TypeTraining typeTraining,
+                       double distance,
+                       LocalDateTime startTime,
+                       LocalTime duration,
+                       String comment,
+                       int avgHeartRate) {
 
         this.username = username;
         this.typeTraining = typeTraining;
@@ -46,7 +52,8 @@ public class TrainingWithUsername {
         this.avgHeartRate = avgHeartRate;
 
     }
-    public TrainingWithUsername(Training training){
+
+    public TrainingDTO(Training training) {
         this.username = Optional.of(training.getUser().getUsername()).orElse("user_uknown");
         this.typeTraining = training.getTypeTraining();
         this.distance = training.getDistance();
@@ -59,6 +66,7 @@ public class TrainingWithUsername {
         this.unitOfMeas = training.getUnitOfMeas();
         this.trainingId = training.getId();
     }
+
     @PostConstruct
     public void setPace() {
         this.unitOfMeas = typeTraining.getUnitOfMeas().toString();

@@ -20,6 +20,7 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
+    //Возвращает список id пользователей на которых userId подписан
     public List<Long> getIdFollowing(Long userId) {
         List<Long> listId = new ArrayList<>();
         List<Friend> from_left_to_right = friendRepository.findByUser1IdAndStatusIn(userId, List.of(FriendStatus.FROM_LEFT_TO_RIGHT, FriendStatus.MUTUALLY));
@@ -33,6 +34,7 @@ public class FriendService {
         return listId;
     }
 
+    //Добавляет в друзья и выводит текущий статус дружбы
     public FriendStatusDTO addFriend(Long userId, Long friendId) {
         User meUser = userRepository.findAllById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         User friendUser = userRepository.findAllById(friendId).orElseThrow(() -> new UserNotFoundException(friendId));
@@ -80,5 +82,38 @@ public class FriendService {
         Friend friend = new Friend(meUser, friendUser, FriendStatus.FROM_LEFT_TO_RIGHT);
         friendRepository.save(friend);
         return new FriendStatusDTO(true, false);
+    }
+    public FriendStatusDTO getStatus(Long userId, Long friendId){
+        Optional<Friend> optional1 = friendRepository.findByUser1IdAndUser2Id(userId, friendId);
+        if (optional1.isPresent()){
+            switch (optional1.get().getStatus()){
+                case FROM_LEFT_TO_RIGHT -> {
+                    return new FriendStatusDTO(true, false);
+                }
+                case FROM_RIGHT_TO_LEFT -> {
+                    return new FriendStatusDTO(false, true);
+                }
+                case MUTUALLY -> {
+                    return new FriendStatusDTO(true, true);
+                }
+
+            }
+        }
+        Optional<Friend> optional2 = friendRepository.findByUser1IdAndUser2Id(friendId, userId);
+        if (optional1.isPresent()){
+            switch (optional1.get().getStatus()){
+                case FROM_LEFT_TO_RIGHT -> {
+                    return new FriendStatusDTO(false, true);
+                }
+                case FROM_RIGHT_TO_LEFT -> {
+                    return new FriendStatusDTO(true, false);
+                }
+                case MUTUALLY -> {
+                    return new FriendStatusDTO(true, true);
+                }
+
+            }
+        }
+        return new FriendStatusDTO(false, false);
     }
 }

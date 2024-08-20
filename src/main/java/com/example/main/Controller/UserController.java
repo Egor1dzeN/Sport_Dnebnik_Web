@@ -1,31 +1,26 @@
 package com.example.main.Controller;
 
 import com.example.main.Repository.UserRepository;
+import com.example.main.Service.FriendService;
 import com.example.main.Service.UserService;
-import com.example.main.domain.Entity.User;
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.mail.Multipart;
-import jakarta.transaction.Transactional;
+import com.example.main.domain.DTO.UserDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
+    private final FriendService friendService;
 
     @GetMapping("/v1/user/v1/getUserById")
-    @Operation()
-    public ResponseEntity<?> getUserById(@RequestParam(value = "user_id") Long id) {
-        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    public ResponseEntity<?> getUserById(@RequestParam(value = "user_id") Long userId, @RequestParam(value = "friend_id") Long friendId) {
+        UserDTO userDTO = new UserDTO(userService.getUserById(friendId).get());
+        userDTO.setFriendStatusDTO(friendService.getStatus(userId, friendId));
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
     @DeleteMapping("/v1/user/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id")long id){
