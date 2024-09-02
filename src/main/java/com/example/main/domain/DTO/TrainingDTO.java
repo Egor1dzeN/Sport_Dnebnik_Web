@@ -54,7 +54,7 @@ public class TrainingDTO {
     }
 
     public TrainingDTO(Training training) {
-        this.username = Optional.of(training.getUser().getUsername()).orElse("user_uknown");
+        this.username = Optional.of(training.getUser().getUsername()).orElse("user_known");
         this.typeTraining = training.getTypeTraining();
         this.distance = training.getDistance();
         this.startTime = training.getStartTime();

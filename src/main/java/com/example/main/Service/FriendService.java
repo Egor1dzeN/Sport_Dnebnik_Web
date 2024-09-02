@@ -83,6 +83,14 @@ public class FriendService {
         friendRepository.save(friend);
         return new FriendStatusDTO(true, false);
     }
+    //Возвращает статус дружбы между userId и friendId
+    /**
+     * Вычисляет сумму двух целых чисел.
+     *
+     * @param userId id пользователя кто делает запрос
+     * @param friendId id пользователя, с которым хочет получить статус.
+     * @return Статус дружбы.
+     */
     public FriendStatusDTO getStatus(Long userId, Long friendId){
         Optional<Friend> optional1 = friendRepository.findByUser1IdAndUser2Id(userId, friendId);
         if (optional1.isPresent()){

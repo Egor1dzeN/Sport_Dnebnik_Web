@@ -44,9 +44,12 @@ public class Training {
     }
     public Training() {
     }
-    @PostConstruct
     public void setPace() {
         this.unitOfMeas = typeTraining.getUnitOfMeas().toString();
+        if (distance == 0) {
+            this.pace = "0";
+            return;
+        }
         switch (typeTraining.getUnitOfMeas()) {
             case Km_H -> {
                 double hour = duration.getHour() + duration.getMinute() / 60.0

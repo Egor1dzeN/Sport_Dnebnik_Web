@@ -39,7 +39,8 @@ public class User implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "training_list")
-    private List<Training> trainingList = new ArrayList<>();
+    private List<Training> trainingList = new ArrayList<>();    
+
 
     public void addTraining(Training training){
         this.trainingList.add(training);

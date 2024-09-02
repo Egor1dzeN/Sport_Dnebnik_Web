@@ -97,9 +97,13 @@ public class BasicSettings implements CommandLineRunner {
     public void createComments(){
         List<Training> training = trainingRepository.findAll();
         Comment comment1 = new Comment(training.getFirst(), usersIdList.get(0), "Comment for training 1");
+        Comment comment2 = new Comment(training.getFirst(), usersIdList.get(1), "Comment for training 1");
         commentService.save(comment1);
-        Comment comment2 = new Comment(training.get(1), usersIdList.get(1), "Comment for training 2");
         commentService.save(comment2);
+        Comment comment3 = new Comment(training.get(1), usersIdList.get(0), "Comment for training 2");
+        Comment comment4 = new Comment(training.get(1), usersIdList.get(1), "Comment for training 2");
+        commentService.save(comment3);
+        commentService.save(comment4);
     }
 
 }

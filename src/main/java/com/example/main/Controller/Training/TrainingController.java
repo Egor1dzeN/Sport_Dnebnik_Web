@@ -1,5 +1,6 @@
 package com.example.main.Controller.Training;
 
+import com.example.main.MyException.InvalidDataException;
 import com.example.main.Service.TrainingService;
 import com.example.main.domain.DTO.TrainingDTOAndPage;
 import com.example.main.domain.DTO.TrainingDTO;
@@ -19,6 +20,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalTime;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -39,6 +42,8 @@ public class TrainingController {
     })
     @Operation(description = "Method for create training")
     public ResponseEntity<TrainingDTO> createTraining(@RequestBody Training training, Principal principal) { //ToDo: Principal principal
+        if (training.getDuration().equals(LocalTime.MIDNIGHT))
+            throw new InvalidDataException("Время занятия не может быть нулевым");
         if (principal == null)
             trainingService.save(adminUsername, training);
         else
@@ -56,16 +61,17 @@ public class TrainingController {
 //        Map<String, ?> map = new HashMap<>();
         return new ResponseEntity<>(new TrainingDTOAndPage(trainingService.getTrainings(limit, offset, userId)), HttpStatus.OK);
     }
+
     @DeleteMapping("/v1/training/delete/{id}")
     public ResponseEntity<?> deleteTraining(@PathVariable("id") Long trainingId) {
         System.out.println(trainingId);
         trainingService.deleteTraining(trainingId);
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
+
     @GetMapping("/v1/training/test")
     @ResponseBody
     public ResponseEntity<String> getAllTrainings1() {
-//        System.out.println("XSS ATACK");
         return new ResponseEntity<>("ahhshsh", HttpStatus.OK);
     }
 
@@ -79,17 +85,17 @@ public class TrainingController {
     @GetMapping("/v1/training/v1/findByUserId")
     @ResponseBody
     public ResponseEntity<TrainingDTOAndPage> findTrainingByUser(@RequestParam(name = "user_id") Long userId,
-                                                                @RequestParam(defaultValue = "0") int offset,
-                                                                @RequestParam(defaultValue = "10") @Max(100) @Min(1) int limit) {
+                                                                 @RequestParam(defaultValue = "0") int offset,
+                                                                 @RequestParam(defaultValue = "10") @Max(100) @Min(1) int limit) {
         return new ResponseEntity<>(new TrainingDTOAndPage(trainingService.findTrainingByUserId(limit, offset, userId)), HttpStatus.OK);
     }
 
-    //Загрузка тренировок ппользователей, на которых подисан
+    //Загрузка тренировок пользователей, на которых подисан
     @GetMapping("/v1/training/v1/following")
     @ResponseBody
     public ResponseEntity<TrainingDTOAndPage> findTrainingFollowingUsers(@RequestParam(name = "user_id") Long userId,
-                                                                        @RequestParam(defaultValue = "0") int offset,
-                                                                        @RequestParam(defaultValue = "10") @Max(100) @Min(1) int limit) {
+                                                                         @RequestParam(defaultValue = "0") int offset,
+                                                                         @RequestParam(defaultValue = "10") @Max(100) @Min(1) int limit) {
         return new ResponseEntity<>(new TrainingDTOAndPage(trainingService.getTrainingFollowingUsers(limit, offset, userId)), HttpStatus.OK);
     }
 }
