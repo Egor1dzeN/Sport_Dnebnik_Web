@@ -4,15 +4,19 @@ import com.example.main.MyException.UserNotFoundException;
 import com.example.main.Repository.FriendRepository;
 import com.example.main.Repository.UserRepository;
 import com.example.main.domain.DTO.FriendStatusDTO;
+import com.example.main.domain.DTO.UserDTO;
 import com.example.main.domain.Entity.Friend;
 import com.example.main.domain.Entity.User;
 import com.example.main.domain.enums.FriendStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.EventListener;
+import org.springframework.security.web.session.HttpSessionCreatedEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -84,17 +88,18 @@ public class FriendService {
         return new FriendStatusDTO(true, false);
     }
     //Возвращает статус дружбы между userId и friendId
+
     /**
      * Вычисляет сумму двух целых чисел.
      *
-     * @param userId id пользователя кто делает запрос
+     * @param userId   id пользователя кто делает запрос
      * @param friendId id пользователя, с которым хочет получить статус.
      * @return Статус дружбы.
      */
-    public FriendStatusDTO getStatus(Long userId, Long friendId){
+    public FriendStatusDTO getStatus(Long userId, Long friendId) {
         Optional<Friend> optional1 = friendRepository.findByUser1IdAndUser2Id(userId, friendId);
-        if (optional1.isPresent()){
-            switch (optional1.get().getStatus()){
+        if (optional1.isPresent()) {
+            switch (optional1.get().getStatus()) {
                 case FROM_LEFT_TO_RIGHT -> {
                     return new FriendStatusDTO(true, false);
                 }
@@ -108,8 +113,8 @@ public class FriendService {
             }
         }
         Optional<Friend> optional2 = friendRepository.findByUser1IdAndUser2Id(friendId, userId);
-        if (optional1.isPresent()){
-            switch (optional1.get().getStatus()){
+        if (optional1.isPresent()) {
+            switch (optional1.get().getStatus()) {
                 case FROM_LEFT_TO_RIGHT -> {
                     return new FriendStatusDTO(false, true);
                 }
@@ -124,4 +129,34 @@ public class FriendService {
         }
         return new FriendStatusDTO(false, false);
     }
+
+    /**
+     * Возвращает список пользователей по определенному статусу дружбы
+     *
+     * @param userId - id пользователя
+     * @param status - MUTUALLY - найти друзей, FROM_LEFT_TO_RIGHT - найти, на кого подписан, FROM_RIGHT_TO_LEFT - кто на меня подписался
+     * @return список пользователей UserDTO
+     */
+    public List<UserDTO> getUsersByFriendStatus(Long userId, FriendStatus status) {
+        //Поиск пользователя, кто сделал запрос
+        User user = userRepository.findAllById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        List<UserDTO> list = new ArrayList<>();
+        switch (status) {
+            case MUTUALLY -> {
+                list.addAll(friendRepository.findByUser1IdAndStatusIn(userId, List.of(status))
+                        .stream()
+                        .map(friend -> new UserDTO(friend.getUser2()))
+                        .toList());
+                list.addAll(friendRepository.findByUser2IdAndStatusIn(userId, List.of(status))
+                        .stream()
+                        .map(friend -> new UserDTO(friend.getUser1()))
+                        .toList());
+            }
+            case FROM_LEFT_TO_RIGHT -> {
+
+            }
+        }
+        return list;
+    }
+
 }

@@ -1,7 +1,9 @@
 package com.example.main.Service;
 
+import com.example.main.Config.KafkaConfig;
 import com.example.main.Repository.CommentRepository;
 import com.example.main.Repository.LikesRepository;
+import com.example.main.domain.DTO.UserDTO;
 import com.example.main.domain.Entity.Training;
 import com.example.main.domain.Entity.User;
 import com.example.main.MyException.UserNotFoundException;
@@ -13,6 +15,7 @@ import lombok.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,11 +29,15 @@ public class TrainingService {
     private final LikesRepository likesRepository;
     private final CommentRepository commentRepository;
     private final FriendService friendService;
+    private final KafkaSender kafkaSender;
 
     public User save(User user, Training training) {
         training.setUser(user);
         user.addTraining(training);
-        return userRepository.save(user);
+        User newUser = userRepository.save(user);
+        UserDTO userDTO = new UserDTO(newUser);
+        kafkaSender.send(KafkaConfig.NEW_TRAINING_TOPIC, userDTO);
+        return newUser;
     }
 
     public User save(String username, Training training) {

@@ -1,6 +1,8 @@
 package com.example.main.Controller;
 
 
+import com.example.main.Config.KafkaConfig;
+import com.example.main.Service.KafkaSender;
 import com.example.main.Service.TrainingService;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -16,12 +18,17 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @Data
 public class ForTest {
     private final TrainingService trainingService;
+    private final KafkaSender kafkaSender;
 
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleNotFound(Model model) {
         model.addAttribute("errorMessage", "The page you are looking for does not exist.");
         return "error/404";
+    }
+    @GetMapping("/v1/test")
+    public String send(){
+        return "test";
     }
 
     @GetMapping("/admin")

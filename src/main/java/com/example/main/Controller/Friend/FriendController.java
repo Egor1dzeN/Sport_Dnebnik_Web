@@ -1,6 +1,7 @@
 package com.example.main.Controller.Friend;
 
 import com.example.main.Service.FriendService;
+import com.example.main.domain.enums.FriendStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,9 @@ public class FriendController {
     public ResponseEntity<?> addFriend(@RequestParam(name = "user_id") Long userId, @RequestParam(name = "friend_id") Long friendId) {
         return new ResponseEntity<>(friendService.addFriend(userId, friendId), HttpStatus.CREATED);
     }
-    @GetMapping("/v1/friend")
-    public void getMyFriend(@RequestParam(name = "user_id") Long userId){
 
+    @GetMapping("/v1/friend")
+    public ResponseEntity<?> getMyFriend(@RequestParam(name = "user_id") Long userId, @RequestParam(name = "status") FriendStatus status) {
+        return new ResponseEntity<>(friendService.getUsersByFriendStatus(userId, status), HttpStatus.OK);
     }
 }

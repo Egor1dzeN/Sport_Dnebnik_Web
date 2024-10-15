@@ -2,10 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+        let stompClient = null;
+
+        function connect(options) {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+                stompClient.subscribe('/topic/messages', function (message) {
+                    // console.log(message);
+                    showMessage(message.body);
+                });
+            });
+        }
+
+        function sendMessage() {
+            var message = document.getElementById("message").value;
+            stompClient.send("/app/sendMessage", {}, message);
+            document.getElementById("message").value = '';
+        }
+
+        function showMessage(message) {
+            var messagesElement = document.getElementById("messages");
+            var messageElement = document.createElement("div");
+            messageElement.textContent = message;
+            let messageObj = JSON.parse(message);
+            let textMessage =
+            messagesElement.appendChild(messageElement);
+        }
+        function generateMessage(message){
+            let
+        }
+        window.onload = connect;
+    </script>
 </head>
 <body>
-
-for al!!
+<h1>Chat</h1>
+<div id="messages">
+<!--    ToDo: доделать-->
+    <div>
+        Пользователь user_admin опубликовал новую тренировку
+    </div>
+</div>
+<input type="text" id="message" placeholder="Enter message">
+<button onclick="sendMessage()">Send</button>
 </body>
 </html>

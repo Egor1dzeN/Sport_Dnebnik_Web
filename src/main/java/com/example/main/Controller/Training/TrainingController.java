@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ import java.util.List;
 public class TrainingController {
     @Value(value = "${admin.username}")
     private String adminUsername;
+    private final KafkaTemplate kafkaTemplate;
 
     private final TrainingService trainingService;
 
@@ -43,7 +45,7 @@ public class TrainingController {
     @Operation(description = "Method for create training")
     public ResponseEntity<TrainingDTO> createTraining(@RequestBody Training training, Principal principal) { //ToDo: Principal principal
         if (training.getDuration().equals(LocalTime.MIDNIGHT))
-            throw new InvalidDataException("Время занятия не может быть нулевым");
+            throw new InvalidDataException("Время занятия не может быть нулевым &#128554");
         if (principal == null)
             trainingService.save(adminUsername, training);
         else
